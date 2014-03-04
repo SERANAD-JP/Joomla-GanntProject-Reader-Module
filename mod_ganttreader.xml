@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.0.0" client="site" method="upgrade">
+	<name>MOD_GANTTREADER</name>
+	<author>Théo Kriszt</author>
+	<version>1.0.0</version>
+	<description>MOD_GANTTREADER_DESCRIPTION</description>
+	
+	<files>
+		<filename>mod_ganttreader.xml</filename>
+		<filename module="mod_ganttreader">mod_ganttreader.php</filename>
+		<filename>index.html</filename>
+		<filename>helper.php</filename>
+		<folder>tmpl</folder>
+		<folder>language</folder>	
+	</files>
+	
+	<media folder="media" destination="mod_ganttreader">
+		<filename>gantt.gan</filename>
+		<filename>mod_ganttreader.css</filename>
+		<filename>index.html</filename>
+	</media>
+	
+    <config>
+    	<fields name="params">
+			<fieldset name="basic">
+			
+				<field 
+				name="title" 
+				type="text" 
+				default="Planning prévisionnel"
+				label="MOD_GANTTREADER_TITLE_LABEL" 
+				description="MOD_GANTTREADER_TITLE_DESC"/>
+				
+		
+				
+			</fieldset>
+			
+			<!-- Fieldset for advanced params -->
+			<fieldset name="advanced">
+				<field
+					name="layout"
+					type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+			</fieldset>
+    	</fields>
+    </config>
+</extension>

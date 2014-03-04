@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><project name="BDDGestionPerso" company="" webLink="http://" view-date="2014-07-03" view-index="0" gantt-divider-location="353" resource-divider-location="300" version="2.0" locale="fr">
+    <description><![CDATA[Mise en place de la version 2 de la Base de Donnée de Gestion du Personnelle de l'IGMM sous Access : 2 Personnes impliquée T et Y.
+]]></description>
+    <view zooming-state="default:0" id="gantt-chart">
+        <field id="tpd3" name="Nom" width="57" order="0"/>
+        <field id="tpd4" name="Date de début" width="21" order="1"/>
+        <field id="tpd5" name="Date de fin" width="21" order="2"/>
+    </view>
+    <view id="resource-table">
+        <field id="0" name="Nom" width="50" order="0"/>
+        <field id="1" name="Rôle par défaut" width="50" order="1"/>
+    </view>
+    <!-- -->
+    <calendars>
+        <day-types>
+            <day-type id="0"/>
+            <day-type id="1"/>
+            <calendar id="1" name="default">
+                <default-week sun="1" mon="0" tue="0" wed="0" thu="0" fri="0" sat="1"/>
+                <only-show-weekends value="false"/>
+                <overriden-day-types/>
+                <days/>
+            </calendar>
+        </day-types>
+        <date year="1" month="1" date="1"/>
+        <date year="2012" month="1" date="2"/>
+        <date year="2012" month="4" date="9"/>
+        <date year="1" month="5" date="1"/>
+        <date year="1" month="5" date="8"/>
+        <date year="2012" month="5" date="17"/>
+        <date year="2012" month="5" date="28"/>
+        <date year="1" month="7" date="14"/>
+        <date year="1" month="8" date="15"/>
+        <date year="1" month="11" date="1"/>
+        <date year="1" month="11" date="11"/>
+        <date year="2012" month="11" date="12"/>
+        <date year="1" month="12" date="25"/>
+        <date year="2005" month="3" date="28"/>
+        <date year="" month="1" date="1"/>
+        <date year="" month="5" date="1"/>
+        <date year="" month="5" date="8"/>
+        <date year="" month="7" date="14"/>
+        <date year="" month="8" date="15"/>
+        <date year="" month="11" date="1"/>
+        <date year="" month="11" date="11"/>
+        <date year="" month="12" date="25"/>
+    </calendars>
+    <tasks empty-milestones="true">
+        <taskproperties>
+            <taskproperty id="tpd0" name="type" type="default" valuetype="icon"/>
+            <taskproperty id="tpd1" name="priority" type="default" valuetype="icon"/>
+            <taskproperty id="tpd2" name="info" type="default" valuetype="icon"/>
+            <taskproperty id="tpd3" name="name" type="default" valuetype="text"/>
+            <taskproperty id="tpd4" name="begindate" type="default" valuetype="date"/>
+            <taskproperty id="tpd5" name="enddate" type="default" valuetype="date"/>
+            <taskproperty id="tpd6" name="duration" type="default" valuetype="int"/>
+            <taskproperty id="tpd7" name="completion" type="default" valuetype="int"/>
+            <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
+            <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
+        </taskproperties>
+        <task id="0" name="BDDGEstionV2_Tot" color="#d3d3d3" meeting="false" start="2014-07-22" duration="10" complete="50" expand="true"/>
+        <task id="2" name="Ajouter Status" color="#ff6699" meeting="false" start="2014-07-08" duration="2" complete="75" expand="true">
+            <depend id="7" type="2" difference="0" hardness="Strong"/>
+            <depend id="10" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="7" name="Reunion Francoise &amp; Yoann" color="#9999ff" meeting="true" start="2014-07-11" duration="0" complete="0" thirdDate="2014-07-11" thirdDate-constraint="1" expand="true">
+            <notes><![CDATA[pas eu le temps de tester a fond les status ajoutés
+mais info positive sur l'ajourt qui semblait compliqué (vaccataire qui devient un statut comme un autre)
+Master1 ET 2 sont également des stagiaires comme les autres
+
+QUESTION EN DEBAT : Doit on changer les cout annulalisés (salaire brut actuellement) en cout total ? en salaire net ?
+
+]]></notes>
+            <depend id="10" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="10" name="Modification Salaires" color="#99ff33" meeting="false" start="2014-07-11" duration="3" complete="100" expand="true">
+            <notes><![CDATA[Modifier les noms des colonnes cout annualisé (par salaire net-brute annualisé et/ou cout total annualisé)
+
+L'ajout modulation ne concerne que les non permanents
+
+Proposition de modifier les non permanents cout annualisée par une colonne éditrice manuellement (l'information n'est plus calculé mais elle est édité) elle serait appelé cout total annualisé
+]]></notes>
+            <depend id="17" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="17" name="Reunion Modification Salaire" color="#ff9900" meeting="true" start="2014-07-17" duration="0" complete="25" expand="true"/>
+        <task id="14" name="Debuggage v1" color="#8cb6ce" meeting="false" start="2014-07-17" duration="2" complete="35" expand="true">
+            <notes><![CDATA[debug de la V1 Affichage contrat (voir toutes les infos)
+et problèmes d'affichage conditionnel liée au status.]]></notes>
+            <depend id="22" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="22" name="Reunion Debug" color="#cc33ff" meeting="true" start="2014-07-21" duration="0" complete="0" expand="true">
+            <depend id="25" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="25" name="Tests nouvelle version" color="#cc3300" meeting="false" start="2014-07-21" duration="1" complete="55" expand="true">
+            <depend id="0" type="2" difference="0" hardness="Strong"/>
+        </task>
+    </tasks>
+    <resources/>
+    <allocations/>
+    <vacations/>
+    <taskdisplaycolumns>
+        <displaycolumn property-id="tpd2" order="-1" width="75" visible="false"/>
+        <displaycolumn property-id="tpd7" order="-1" width="75" visible="false"/>
+        <displaycolumn property-id="tpd6" order="-1" width="75" visible="false"/>
+        <displaycolumn property-id="tpd10" order="-1" width="75" visible="false"/>
+        <displaycolumn property-id="tpd11" order="-1" width="75" visible="false"/>
+        <displaycolumn property-id="tpd1" order="-1" width="75" visible="false"/>
+        <displaycolumn property-id="tpd9" order="-1" width="75" visible="false"/>
+        <displaycolumn property-id="tpd8" order="-1" width="75" visible="false"/>
+        <displaycolumn property-id="tpd0" order="-1" width="75" visible="false"/>
+        <displaycolumn property-id="tpd3" order="0" width="199" visible="true"/>
+        <displaycolumn property-id="tpd4" order="1" width="75" visible="true"/>
+        <displaycolumn property-id="tpd5" order="2" width="75" visible="true"/>
+    </taskdisplaycolumns>
+    <previous/>
+    <roles roleset-name="Default"/>
+    <roles roleset-name="SoftwareDevelopment"/>
+</project>

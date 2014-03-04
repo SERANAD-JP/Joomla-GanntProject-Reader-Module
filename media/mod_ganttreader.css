@@ -1,0 +1,58 @@
+@charset "utf-8";
+/* CSS Document */
+
+fieldset{/*Effets sur les blocs*/
+
+	margin-top: 10px;
+	margin-bottom :10px;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border: thin solid black;
+}
+
+
+legend{ /*Effets sur les titres des blocs*/
+	font-family : Tahoma, Geneva, sans-serif;
+	background-color : #d3d3d3;
+	border: thin black solid;
+	width: auto;
+	padding: 0 3px;
+	margin-left: 15px;
+}
+
+table{
+	border:thin solid black;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-collapse:collapse;
+}
+
+th{
+	border:thin solid black;
+	font-weight:bold;
+	padding: 5px 5px;
+}
+
+tr{
+	border:inherit;
+}
+
+td{
+	border:thin solid black;
+	padding: 5px 5px;
+}
+
+ul.tasks{
+	display:inline-block;
+	float:left;
+	list-style-type:none;
+	
+}
+
+ul.tasks li{
+	border: solid thin rgba(0, 64, 80 , 0.5) ;
+	border-collapse:collapse;
+	padding: 2px 2px;
+}
