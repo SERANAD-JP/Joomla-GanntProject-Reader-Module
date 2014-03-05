@@ -2,12 +2,16 @@
 class GanttReaderDate{
 
 	/*
-	 * @param $range la taille de la fenêtre avant/après aujourd'hui
+	 * @param $range la taille de la fenêtre avant la date $current
 	 * @return timestamp la date du premier jour d'il y a $range mois
 	 */
-	function earliestMonth($range=5){
-		$year = date('Y', time());
-		$month = date('m', time());
+	function earliestMonth($range, $current=NULL){
+		if($current==NULL){
+			$current = time(); //par défaut : aujourd'hui	
+		}
+		
+		$year = date('Y', $current);
+		$month = date('m', $current);
 		
 		$month = $month-$range;
 		if($month<0){
@@ -15,16 +19,20 @@ class GanttReaderDate{
 			$year--;
 		}
 		
-		return strtotime($year.'-'.$month.'-01');	
+		return strtotime($year.'-'.$month.'-01');
 	}
 	
 	/*
-	 * @param $range la taille de la fenêtre avant/après aujourd'hui
+	 * @param $range la taille de la fenêtre après aujourd'hui
 	 * @return timestamp la date du dernier jour du mois dans $range mois
 	 */
-	function lastestMonth($range=5){
-		$year = date('Y', time());
-		$month = date('m', time());
+	function lastestMonth($range, $current=NULL){
+		if($current==NULL){
+			$current = time();	
+		}
+		
+		$year = date('Y', $current);
+		$month = date('m', $current);
 		
 		$month = $month+$range;
 		if($month>12){
@@ -35,18 +43,17 @@ class GanttReaderDate{
 		$firstDay = strtotime($year.'-'.$month.'-01');
 		$lastDay = date('Y-m-t', $firstDay);
 		
-		return $lastDay;	
+		return strtotime($lastDay);	
 	}
 	
 	
 	/*
 	 * @param timestamp du jour a checker
-	 * @ return true si le jour concerné est un WE, faux sinon
+	 * @return true si le jour concerné est un WE, faux sinon
 	 */
 	function isWeekEnd($timestamp){
-		$day = date('D', $timestamp);
-		$out = $day==='Sat' || $day==='Sun';
-		return $out;
+		$day = date('N', $timestamp);
+		return ($out>5); //true si 5eme jour de la semaine déjà passé
 	}
 	
 	/*
@@ -84,12 +91,34 @@ class GanttReaderDate{
 		return $jours;
 	}
 	
-	function listMonth(){
+	
+	/*
+	 * @param $timeA et $timeB, les  timestamps des mois entre lesquels il faut donner les noms
+	  *@return array les noms des mois situés entre timeA et timeB (inclus)
+	 */
+	function listMonths($timeA, $timeB){
+		
+		$current = $timeA;
+		do{
+			$months[]= date('M',$current);
+			$current = GanttReaderDate::lastestMonth(1, $current); //sauter au mois suivant
+			
+		} while($current<=$timeB);
+		return $months;
 		
 	}
 	
-	function listDays(){
-		
+	/*
+	 * @param $timeA et $timeB, les  timestamps des jours entre lesquels il faut donner les numeros
+	  *@return array les numéros des jours situés entre timeA et timeB (inclus)
+	 */
+	function listDays($timeA, $timeB){
+		$current = $timeA;
+		do{
+			$days[] = date('d', $current);
+			$current = $current+86400;//+1 day
+		} while($current<=$timeB);
+		return $days;
 	}
 	
 	/*
@@ -107,7 +136,7 @@ class GanttReaderDate{
 			return(
 				GanttReaderDate::inSight($start, $earliest, $lastest)||	//Si début inclus
 				GanttReaderDate::inSight($end, $earliest, $lastest)|| 	//ou si fin incluse
-				GanttReaderDate($earliest, $start, $end));				//ou si recouvre la fenêtre
+				GanttReaderDate::inSight($earliest, $start, $end));				//ou si recouvre la fenêtre
 			
 		
 	}
@@ -132,7 +161,7 @@ class GanttReaderDate{
 			if(GanttReaderDate::inSight($lastest, $start, $end)){//si plus tard que la fenêtre
 				$max = $end;
 			}
-			if(GanttReaderDate($earliest, $start, $end)){//si plus tôt que la fenêtre
+			if(GanttReaderDate::inSight($earliest, $start, $end)){//si plus tôt que la fenêtre
 				$min = $start;
 			}
 		}
@@ -140,6 +169,21 @@ class GanttReaderDate{
 					'min' => $min,
 					'max' => $max
 					);
+	}
+	
+	/*
+	 * @params l'array des projets source, $range le nombre de mois autour de la date courante à conserver
+	 * @return l'array des projets, filtrés
+	 */
+	function filterProjects($projects, $range){
+		
+		foreach($projects as $project){
+			if(GanttReaderDate::inWindow($range, $project)){
+				$out[]=$project;	
+			}
+		}
+		return $out;
+		
 	}
 	
 }

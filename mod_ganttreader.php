@@ -21,22 +21,9 @@ require_once(dirname(__FILE__).'/models/date.php');
 
 require_once(dirname(__FILE__).'/models/project.php');
 
+require_once(dirname(__FILE__).'/models/drawer.php');
+
 require_once(dirname(__FILE__).'/helper.php');
-
-$title = GanttReaderHelper::getTitle($params);
-
-$range = GanttReaderHelper::getRange($params);
-
-$projects = GanttReaderParser::getProjects($gan); 
-
-$constraints = GanttReaderParser::getConstraints($gan);
-
-$vacations = GanttReaderParser::getVacations($gan);
-
-/*--------------------------------*/
-
-$earliest = GanttReaderDate::earliestMonth($range); //Les mois les plus étendus à parcourir parmi les projets
-$lastest = GanttReaderDate::lastestMonth($range);
 
 
 
