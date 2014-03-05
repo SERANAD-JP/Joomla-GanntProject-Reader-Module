@@ -1,6 +1,7 @@
 <!-- Affichage : default -->
 <?php
-$diagrammes = modXmlReaderHelper::getDiagrams($gan);
+
+/*$diagrammes = modXmlReaderHelper::getDiagrams($gan);
 $contraintes = modXmlReaderHelper::getConstraints($gan);
 
 $dateMin = modXmlReaderHelper::getMinDate($diagrammes);
@@ -18,6 +19,8 @@ echo('La différence fait ' . $etendue . '(soit un peu plus de '. ($etendue/30).
 echo('<hr>');
 
 echo($noms);
+*/
+
 
 
 

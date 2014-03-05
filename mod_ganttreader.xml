@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <extension type="module" version="3.0.0" client="site" method="upgrade">
-	<name>MOD_GANTTREADER</name>
+	<name>GanttReader</name>
 	<author>Théo Kriszt</author>
 	<version>1.0.0</version>
 	<description>MOD_GANTTREADER_DESCRIPTION</description>
@@ -10,6 +11,7 @@
 		<filename module="mod_ganttreader">mod_ganttreader.php</filename>
 		<filename>index.html</filename>
 		<filename>helper.php</filename>
+		<folder>models</folder>
 		<folder>tmpl</folder>
 		<folder>language</folder>	
 	</files>
@@ -24,24 +26,31 @@
     	<fields name="params">
 			<fieldset name="basic">
 			
-				<field 
+				<field
 				name="title" 
 				type="text" 
 				default="Planning prévisionnel"
 				label="MOD_GANTTREADER_TITLE_LABEL" 
 				description="MOD_GANTTREADER_TITLE_DESC"/>
-				
-		
+			
+			
+				<field name="range"
+					type="integer"
+					default="5"
+					label="MOD_GANTTREADER_RANGE_LABEL"
+					description="MOD_GANTTREADER_RANGE_DESC"
+					first="1"
+					last="12"
+					step="1"/>
 				
 			</fieldset>
 			
-			<!-- Fieldset for advanced params -->
 			<fieldset name="advanced">
 				<field
 					name="layout"
 					type="modulelayout"
 					label="JFIELD_ALT_LAYOUT_LABEL"
-					description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+					description="JFIELS_ALT_MODULE_LAYOUT_DESC"/>
 			</fieldset>
     	</fields>
     </config>

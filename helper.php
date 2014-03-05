@@ -10,14 +10,14 @@
  *  
  */
 
-class modXmlReaderHelper{
-	
-	function getColor($params){
-		return ($params->get('color'));
-	}
+class GanttReaderHelper{
 
-	function getTitle($params){
+	static function getTitle($params){
 		return ($params->get('title'));
+	}
+	
+	static function getRange($params){
+		return ($params->get('range'));
 	}
 	
 	/*
@@ -68,80 +68,9 @@ class modXmlReaderHelper{
 	}
 	
 	
-	/*
-	 * @param SimpleXMLElement $gan l'instance du parseur du diagramme de gantt à traiter
-	 * @return array() le tableau des tâches organisées selon clé => valeur
-	 */
-	function getDiagrams($gan){
-		
-		foreach($gan->tasks->task as $task){//pour chaque tâche du document
-			
-			$id = $task->attributes()->id->__toString();
-			$nom = $task->attributes()->name->__toString();
-			$couleur = $task->attributes()->color->__toString();
-			$debut = $task->attributes()->start->__toString();
-			$meeting = $task->attributes()->meeting->__toString();
-			$meeting = $meeting==='true';
-			$duree = $task->attributes()->duration->__toString();
-			$avancement = $task->attributes()->complete->__toString();
-			$notes = $task->notes->__toString();
-			
-			$diagrammes[] = array(
-							'id' => $id,
-							'nom' => $nom,
-							'couleur' => $couleur,
-							'debut' => $debut,
-							'duree' => $duree,
-							'avancement' => $avancement,
-							'meeting' =>$meeting,
-							'notes' => $notes
-							);
-			
-		}
-		
-		return $diagrammes;
-	}
 	
-	/*
-	 * @param SimpleXMLElement $gan l'instance du parseur du diagramme de gantt à traiter
-	 * @return array() le tableau des contraintes inter tâches selon $maTache ==(a pour successeur)==> $monAutreTache
-	 */
-	function getConstraints($gan){
-		foreach($gan->tasks->task as $task){ //pour chaque tâche du document
-			foreach($task->depend as $dep){
-				$constraints[] = array($task->attributes()->id->__toString() => $dep->attributes()->id->__toString());
-			}
-		}
-		return $constraints;
-	}
-
-	/*
-	 * @param SmpleXMLElement l'instance du parseur du diagramme de gantt à traiter
-	 * @return String la chaîne brute représentant le diagramme de Gantt
-	 */
-	function toString($gan){
-		
-		$taches = modXmlReaderHelper::getDiagrams($gan);
-		$contraintes = modXmlReaderHelper::getConstraints($gan);
-		
-		$out='<p>===TACHES===</p>';
-		foreach($taches as $tache){
-			foreach($tache as $key => $value){
-				$out.=($key . ' => ' . $value . '<br />');	
-			}
-			$out.=('-------------------- <br />');
-		}
-		
-		$out.='<p>===CONTRAINTES===</p>';
-		$out.=('[Clé] == a pour successeur ==> valeur <br/>');
-		foreach($contraintes as $dep){
-			foreach($dep as $key => $value){
-				$out.=($key . '====> ' . $value . '<br />');	
-			}
-		}
-			
-		return $out;
-	}
+	
+	
 	
 }
 

@@ -1,38 +1,48 @@
 <?php
-/*Style declaration*/
-
 
 defined('_JEXEC') or die('Restricted access');
 
-require_once(dirname(__FILE__).'/helper.php' );
+//Picks-up media files
+$gan = simplexml_load_file(JPATH_SITE.'/media/mod_ganttreader/gantt.gan');
 
-//gets parameters setted in bak-end
-$title= modXmlReaderHelper::getTitle($params);
-
-$color=modXmlReaderHelper::getColor($params);
-
-//Picks-up useful files
-$ganfile = JPATH_SITE.'/media/mod_xmlreader/gantt.gan';
-
-$cssfile = JURI::root().'media/mod_xmlreader/mod_xmlreader.css';
+$cssFile = JURI::root().'media/mod_ganttreader/mod_ganttreader.css';
 
 $document = JFactory::getDocument();
 
 
-//Defines CSS by default then specific style using defined parameters
-$document->addStyleSheet($cssfile);
+//Defines CSS by default
+$document->addStyleSheet($cssFile);
 
-$customStyle = 	
-	'fieldset{
-		background-color: '.modXmlReaderHelper::getColor($params).';
-	}';
 
-$document->addStyleDeclaration($customStyle);
+//Loads models
+require_once(dirname(__FILE__).'/models/parser.php');
 
-//Loads gantt file through a SimpleXMLElement parser
-$gan = simplexml_load_file($ganfile);
+require_once(dirname(__FILE__).'/models/date.php');
 
-//gets the right layout path (default JModuleHelper::getLayoutPath( 'mod_xmlreader' ) doesn't work)
+require_once(dirname(__FILE__).'/models/project.php');
 
-require( JModuleHelper::getLayoutPath( 'mod_xmlreader', $params->get('layout') ) );
+require_once(dirname(__FILE__).'/helper.php');
+
+$title = GanttReaderHelper::getTitle($params);
+
+$range = GanttReaderHelper::getRange($params);
+
+$projects = GanttReaderParser::getProjects($gan); 
+
+$constraints = GanttReaderParser::getConstraints($gan);
+
+$vacations = GanttReaderParser::getVacations($gan);
+
+/*--------------------------------*/
+
+$earliest = GanttReaderDate::earliestMonth($range); //Les mois les plus étendus à parcourir parmi les projets
+$lastest = GanttReaderDate::lastestMonth($range);
+
+
+
+//Finally, loads the view
+require( JModuleHelper::getLayoutPath( 'mod_ganttreader', $params->get('layout') ) );
+
+
+
 ?>
