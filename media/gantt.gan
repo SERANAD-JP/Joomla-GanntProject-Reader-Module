@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="BDDGestionPerso" company="" webLink="http://" view-date="2014-07-03" view-index="0" gantt-divider-location="353" resource-divider-location="300" version="2.0" locale="fr">
+<?xml version="1.0" encoding="UTF-8"?><project name="BDDGestionPerso" company="" webLink="http://" view-date="2013-12-16" view-index="0" gantt-divider-location="353" resource-divider-location="300" version="2.0" locale="fr">
     <description><![CDATA[Mise en place de la version 2 de la Base de Donnée de Gestion du Personnelle de l'IGMM sous Access : 2 Personnes impliquée T et Y.
 ]]></description>
-    <view zooming-state="default:0" id="gantt-chart">
+    <view zooming-state="default:6" id="gantt-chart">
         <field id="tpd3" name="Nom" width="57" order="0"/>
         <field id="tpd4" name="Date de début" width="21" order="1"/>
         <field id="tpd5" name="Date de fin" width="21" order="2"/>
@@ -59,10 +59,11 @@
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
         <task id="26" name="projet1" color="#009999" meeting="false" start="2013-09-19" duration="8" complete="0" expand="true"/>
-        <task id="27" name="projet2" color="#8cb6ce" meeting="false" start="2013-09-19" duration="45" complete="0" expand="true"/>
-        <task id="28" name="projet3" color="#66ff00" meeting="false" start="2014-03-03" duration="48" complete="0" expand="true"/>
-        <task id="29" name="projet4" color="#8cb6ce" meeting="false" start="2014-08-14" duration="21" complete="0" expand="true"/>
-        <task id="30" name="projet5" color="#8cb6ce" meeting="false" start="2014-09-01" duration="45" complete="0" expand="true"/>
+        <task id="27" name="projet2" color="#8cb6ce" meeting="false" start="2013-09-19" duration="2" complete="0" expand="true"/>
+        <task id="28" name="projet3" color="#66ff00" meeting="false" start="2014-01-02" duration="8" complete="0" expand="true"/>
+        <task id="29" name="projet4" color="#00cccc" meeting="false" start="2014-01-14" duration="9" complete="0" expand="true"/>
+        <task id="30" name="projet5" color="#ff9966" meeting="false" start="2014-01-27" duration="5" complete="0" expand="true"/>
+        <task id="31" name="bilan" color="#ffff00" meeting="true" start="2014-01-31" duration="0" complete="0" expand="true"/>
     </tasks>
     <resources>
         <resource id="1" name="Gostan" function="Default:1" contacts="gostan@lepetitpapanoel.com" phone="0467655421"/>

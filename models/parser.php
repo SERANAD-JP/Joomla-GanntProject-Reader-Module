@@ -1,15 +1,19 @@
 
 <?php
 
+/*
+ * Utilitaire de récupération des informations contenues dans le fichier GanttProject
+*/
 class GanttReaderParser{
 	/*
 	 * @param SimpleXMLElement $gan l'instance du parseur du diagramme de gantt à traiter
 	 * @return array() le tableau des projets organisées selon clé => valeur
+	 * chaque projet se présente en tableau associatif contenant chacune des informations extraites
 	 */
 	static function getProjects(&$gan){
-		$projects = NULL;	//valeur par défaut, contre les diagrammes vides
-		foreach($gan->tasks->task as $task){//pour chaque tâche du document
-			
+		$projects = NULL;	//valeur par défaut, évite les diagrammes vides
+		$index=0;
+		foreach($gan->tasks->task as $task){
 			$id = $task->attributes()->id->__toString();
 			$nom = $task->attributes()->name->__toString();
 			$couleur = $task->attributes()->color->__toString();
@@ -21,6 +25,7 @@ class GanttReaderParser{
 			$notes = $task->notes->__toString();
 			
 			$projects[] = array(
+							'index' => $index,
 							'id' => $id,
 							'nom' => $nom,
 							'couleur' => $couleur,
@@ -30,7 +35,7 @@ class GanttReaderParser{
 							'meeting' =>$meeting,
 							'notes' => $notes
 							);
-			
+			$index++;
 		}
 		
 		return $projects;
@@ -38,25 +43,33 @@ class GanttReaderParser{
 	
 	/*
 	 * @param SimpleXMLElement $gan l'instance du parseur du diagramme de gantt à traiter
-	 * @return array() le tableau des contraintes inter tâches selon $maTache ==(a pour successeur)==> $monAutreTache
+	 * @return array() le tableau des contraintes inter-tâches selon $maTache ==(a pour successeur)==> $monAutreTache
 	 */
 	static function getConstraints(&$gan){
-		$constraints=NULL; //null par défaut, contre l'abse,ce de contraintes
+		$constraints=NULL; //null par défaut, contre l'absence de contraintes
+		$index=0;
 		foreach($gan->tasks->task as $task){ //pour chaque tâche du document
+			
 			foreach($task->depend as $dep){
 				$constraints[] = array($task->attributes()->id->__toString() => $dep->attributes()->id->__toString());
 			}
+			
+			$index++;
 		}
 		return $constraints;
 	}
 	
+	
+	/*
+	 * @param SimpleXMLElement $gan l'instance du parseur du diagramme de gantt à traiter
+	 * @return array() les plages de congés avec dates de début et de fin
+	 */
 	static function getVacations(&$gan){
 		$vacations=NULL;//null par défaut, contre l'absence de congés
+		
 		foreach ($gan->vacations->vacation as $vacation){
 			$start = $vacation->attributes()->start->__toString();
-			
 			$end = $vacation->attributes()->end->__toString();
-			
 			$vacations[] = array(
 								'start' => $start,
 								'end' => $end
