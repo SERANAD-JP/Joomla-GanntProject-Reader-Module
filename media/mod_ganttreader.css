@@ -6,9 +6,7 @@
     max-width:100%;
 	overflow:auto;
 	float:left;
-	display:block;
-	color:#93a1a1;
-	background:#002b36;
+	display:block;;
 	position:relative;
 }
 
@@ -17,6 +15,8 @@
 	height:85%;
     z-index:1;
 	margin: 0;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
     -webkit-box-shadow: rgba(0, 0, 0, 0.9) 0 2px 6px, rgba(255, 255, 255, 0.2) 0 1px 0 inset;
     -moz-box-shadow: rgba(0, 0, 0, 0.9) 0 2px 6px, rgba(255, 255, 255, 0.2) 0 1px 0 inset;
     box-shadow:rgba(255, 255, 255, 0.2) 0 1px 0 inset;
@@ -26,31 +26,35 @@
 .ganttProject{
     margin:0;
     margin-right:-1px;
-    
 }
 
 .ganttProjectStart{
 
 	float:right;
-	width:90%;
+	width:100%;
+	border-left: 1px solid black;
     border-top-left-radius:3px;
     border-bottom-left-radius:3px;
 	margin-right:-1px;
-    box-shadow:rgba(0, 0, 0, 0.9) 0 2px 6px;
-    /*si bug, ajouter equivalents moz et webkit*/
-    
+	padding-right:1px;
 }
 
 .ganttProjectEnd{
-
-	float:left;
 	width:90%;
-	border-color:black;
-	border-right:1px, solid black;
+
+	border-right:1px solid black;
 	border-top-right-radius:3px;;
 	border-bottom-right-radius:3px;
     margin-left:0px;
+    margin-right:2px;
     
+}
+
+path{
+	stroke:white;
+	stroke-width:5px;
+    stroke-linecap:round;
+    fill:none;
 }
 
 table{
@@ -60,60 +64,52 @@ table{
 }
 
 table.ganttHeader{
-	float:right;
+	float:left;
 	box-shadow:0 2px 2px black;
 	z-index:1;
 }
 
-.ganttEmbed{/*Titre et marqueur aujourd'hui*/
-	color:#FFFFFF;
+.ganttEmbed{ /*Titre et marqueur aujourd'hui*/
+    text-transform:uppercase;
+    font-weight:bold;
+    
 }
 
 
 time{
-	
-  position: absolute;
-  top: 60px;
-  width: 2px;
-  background: #F03;
-  bottom: 0;
-  z-index: 1000;
-  text-indent: -12000px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 0 10px;
-  -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 0 10px;
-  box-shadow: rgba(0, 0, 0, 0.3) 0 0 10px;	
-
+	position:absolute;
+	top: 72px;
+	width: 2px;
+	background: #66FEE5;
+	bottom: 0;
+	z-index: 1000;
+	text-indent: -12000px;
+	-webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 0 10px;
+	-moz-box-shadow: rgba(0, 0, 0, 0.3) 0 0 10px;
+	box-shadow: rgba(0, 0, 0, 0.3) 0 0 10px;
 }
+
+.ganttObject{
+	position:absolute;
+	float:left;
+    z-index:1;
+}
+
+
 
 td{
 	text-align:center;
 	border:thin solid black;
-	height:25px;
+	height:35px;
 	min-width:35px;
+    padding:0;
 }
 
 td.ganttSider{
-    overflow:auto;
 	min-width: 199px;
 	border-right: 1px solid #000b0d;
 	box-shadow:2px 0 2px black;
 	z-index: 2;
-}
-
-/*Conteneur pour les jours*/
-td.dayBox, td.dayOff{
-    padding:0;
-    
-}
-
-td.dayBox, td.dayOff, td.ganttSider{
-	height:30px;
-}
-
-
-/*Conteneur pour les jours de repos*/
-td.dayOff{
-	background: #14424C;
 }
 
 

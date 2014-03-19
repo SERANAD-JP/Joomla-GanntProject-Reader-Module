@@ -10,10 +10,61 @@ $title = $params->get('title');
 
 $range = $params->get('range');
 
-/*  Extraction des infos depuis le fichier GanttProject  */
-$projects = GanttReaderParser::getProjects($gan); 
+$defaultColor = $params->get('defaultColor'); //couleur par defaut des projets
 
-$constraints = GanttReaderParser::getConstraints($gan);
+$dayBoxColor = $params->get('dayBoxColor'); //couleur des cases "normales"
+
+$dayOffColor = $params->get('dayOffColor');
+
+$constraintColor = $params->get('constraintColor');
+
+$titleColor = $params->get('titleColor');
+
+$textColor = $params->get('textColor');
+
+$todayColor = $params->get('todayColor');
+
+//Ajout des styles parametrés
+$styles = 	'
+			#ganttDiagram{
+    			background-color:'.$dayBoxColor.';
+				color:'.$textColor.';
+			}
+			
+			.ganttEmbed{
+				color:'.$titleColor.';
+			}
+			
+			time{
+				background-color:'.$todayColor.';
+			}
+			
+			marker, path{
+				background-color:'.$constraintColor.';
+			}
+			
+			td.dayOff{
+				background-color:'.$dayOffColor.';
+			}
+			
+			.ganttProject, .ganttProjectEnd, .ganttProjectStart{
+				background-color:'.$defaultColor.';
+				
+			}
+			
+			.complete{
+				background:url('.$stripesPic.');
+			}
+			
+			
+			';
+			
+$document->addStyleDeclaration($styles);
+
+/*  Extraction des infos depuis le fichier GanttProject  */
+$projects = GanttReaderParser::getProjects($gan, $defaultColor); 
+$projects = GanttReaderDate::filterProjects($projects, $range); //filtrage
+$constraints = GanttReaderParser::getConstraints($gan, $projects);
 
 $vacations = GanttReaderParser::getVacations($gan);
 

@@ -5,10 +5,11 @@ defined('_JEXEC') or die('Restricted access');
 //Picks-up media files
 $gan = simplexml_load_file(JPATH_SITE.'/media/mod_ganttreader/gantt.gan');
 
-$cssFile = JURI::root().'media/mod_ganttreader/mod_ganttreader.css';
-
 $document = JFactory::getDocument();
 
+$cssFile = JURI::root().'media/mod_ganttreader/mod_ganttreader.css';
+
+$stripesPic = JURI::root().'media/mod_ganttreader/stripes.png';
 
 //Defines CSS by default
 $document->addStyleSheet($cssFile);

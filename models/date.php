@@ -65,6 +65,7 @@ class GanttReaderDate{
 	 * @return true s'il s'agit d'un jour en congé, faux sinon
 	 */
 	function isVacation($time, &$vacations){
+		if(isset($vacations))
 		foreach($vacations as $vacation){
 			$start = strtotime($vacation['start']);
 			$end = strtotime($vacation['end']);
@@ -100,20 +101,38 @@ class GanttReaderDate{
 		return ($timestamp>$dateA && $timestamp<$dateB);
 	}
 	
+	/*
+	 * @params le $project, le numero de la $case à traiter (de 0 à durée projet) et la liste des $vacations
+	 */
+	 function completed($project, $case, &$vacations){
+		 $duree = GanttReaderDate::projectLength($project, $vacations);//5
+		$rapport = round((($case+1)/$duree)*100);
+		//echo($project['nom'].' Durée : '.$duree.' NumCase : '.$case.' Rapport : '.$rapport.' Avancement : '.$project['avancement']);
+		//if($rapport<=($project['avancement'])) echo(' marqué !');
+		//echo('<br />');
+
+		 return ($rapport<=($project['avancement']));
+		 //return $actuel<$project['avancement'];
+		 
+	 }
+	
 	
 	/*
 	 * @param $timeA et $timeB, les  timestamps des mois entre lesquels il faut donner les noms
 	  *@return array les noms des mois situés entre timeA et timeB (inclus) ainsi que leur durée en jours
 	  * ex. Jan => 31, Feb => 28, Mar => 31 etc...
+	  * @see Joomla API::JText
 	 */
 	function listMonths($timeA, $timeB){
 		
 		$current = $timeA; //pointer vers le premier mois
 		
 		do{
+			$name = JText::_(strtoupper(date('F', $current))); //mois en majuscules, traduit dans la langue de l'utilisateur
+			$length = date('t', $current);
 			$months[]= array(
-							'name' => date('M',$current), 
-							'length' => date('t', $current)
+							'name' => $name, 
+							'length' => $length
 							);
 			
 			$current = GanttReaderDate::lastestMonth(1, $current); //sauter au mois suivant
@@ -174,7 +193,7 @@ class GanttReaderDate{
 		
 		$min = $earliest; //nouvelles limites, à adapter
 		$max = $lastest;
-		
+		if(isset($projects)){
 		foreach($projects as $project){
 			$start = strtotime($project['debut']);	//début et fin de la frontière originelle
 			$end = strtotime('+'.$project['duree'].' days', $start);
@@ -186,6 +205,7 @@ class GanttReaderDate{
 			if(GanttReaderDate::inSight($earliest, $start, $end)){//si plus tôt que la fenêtre
 				$min = $start;
 			}
+		}
 		}
 		$min = GanttReaderDate::earliestMonth(0, $min); //on élargit au début et à la fin des mois pour avoir des mois complets
 		$max = GanttReaderDate::lastestMonth(0, $max);
@@ -201,13 +221,42 @@ class GanttReaderDate{
 	 * @return l'array des projets, filtrés (i.e qui devront apparaitre dans le rendu)
 	 */
 	function filterProjects($projects, $range){	
-		foreach($projects as $project){
-			if(GanttReaderDate::inWindow($range, $project)){
-				$out[]=$project;	
+	
+	$out = NULL;//(protège de l'absence de projets dans la fenêtre)
+	  	
+		  if(isset($projects)){
+			foreach($projects as &$project){
+				
+				if(GanttReaderDate::inWindow($range, $project)){
+					$out[]=$project;	
+				}
 			}
 		}
 		return $out;
 	}
+	
+	/*
+	 * retourne la taille finale du projet : durée nominale + décalage des congés
+	 */
+	 function projectLength($project, $vacations){
+		 //$debug = $project['nom']==='Modification Salaires';
+		 
+		
+		 $duree = 1; //compteur de l'avancement total
+		 $i=0; //compteur de l'avancement nominal
+		 $current = strtotime($project['debut']);
+		 while($i<$project['duree']-1){
+			 //if($debug) echo('duree: '.$duree.' date : '.date('d m Y', $current).'<br />');
+			 
+			 $i++;
+			 $current = strtotime('+1 day', $current);
+			 $duree++;
+			 if(GanttReaderDate::inRest($current, $vacations)){
+				$i--; 
+			 }
+		 }
+		 return $duree;
+	 }
 }
 
 

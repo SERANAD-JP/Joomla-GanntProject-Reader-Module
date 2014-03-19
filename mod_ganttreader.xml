@@ -18,6 +18,7 @@
 	
 	<media folder="media" destination="mod_ganttreader">
 		<filename>gantt.gan</filename>
+		<filename>stripes.png</filename>
 		<filename>mod_ganttreader.css</filename>
 		<filename>index.html</filename>
 	</media>
@@ -30,7 +31,7 @@
 				name="title" 
 				type="text" 
 				default="Planning prévisionnel"
-				label="MOD_GANTTREADER_TITLE_LABEL" 
+				label="MOD_GANTTREADER_TITLE_LABEL"
 				description="MOD_GANTTREADER_TITLE_DESC"/>
 			
 			
@@ -42,6 +43,58 @@
 					first="1"
 					last="6"
 					step="1"/>
+					
+				<field
+				name="defaultColor" 
+				type="text" 
+				default="#0989a0"
+				label="MOD_GANTTREADER_DEFAULT_COLOR_LABEL" 
+				description="MOD_GANTTREADER_DEFAULT_COLOR_DESC"/>
+				
+				<field
+				name="dayBoxColor" 
+				type="text" 
+				default="#002b36"
+				label="MOD_GANTTREADER_COLOR_LABEL" 
+				description="MOD_GANTTREADER_COLOR_DESC"/>
+				
+				
+				<field
+				name="titleColor" 
+				type="text" 
+				default="#FFFFFF"
+				label="MOD_GANTTREADER_TITLE_COLOR_LABEL" 
+				description="MOD_GANTTREADER_TITLE_COLOR_DESC"/>
+				
+				<field
+				name="textColor" 
+				type="text" 
+				default="#93a1a1"
+				label="MOD_GANTTREADER_TEXT_COLOR_LABEL" 
+				description="MOD_GANTTREADER_TEXT_COLOR_DESC"/>
+				
+				<field
+				name="dayOffColor" 
+				type="text" 
+				default="#14424C"
+				label="MOD_GANTTREADER_DAYOFF_COLOR_LABEL" 
+				description="MOD_GANTTREADER_DAYOFF_COLOR_DESC"/>
+				
+				<field
+				name="constraintColor" 
+				type="text" 
+				default="#FFFFFF"
+				label="MOD_GANTTREADER_CONSTRAINT_COLOR_LABEL" 
+				description="MOD_GANTTREADER_CONSTRAINT_COLOR_DESC"/>
+				
+				<field
+				name="todayColor" 
+				type="text" 
+				default="#00FFFF"
+				label="MOD_GANTTREADER_TODAY_COLOR_LABEL" 
+				description="MOD_GANTTREADER_TODAY_COLOR_DESC"/>
+				
+				
 				
 			</fieldset>
 			

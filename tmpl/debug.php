@@ -6,8 +6,9 @@ echo('Range : '.$range.'<hr>');
 //----------------------------
 echo('PROJETS : <br />');
 $i=0;
+if(isset($projects))
 foreach($projects as $project){
-	echo('Id : '.$project['id'].' | Debut : '.$project['debut'].' | Meeting : '.$project['meeting'].' | Duree : '.$project['duree'].' | Avancement : '.$project['avancement'].'| Index : '.$project['index'].'<br />');
+	echo('Id : '.$project['id'].' | Debut : '.$project['debut'].' | Meeting : '.$project['meeting'].' | Duree : '.$project['duree'].' | Avancement : '.$project['avancement'].'<br />');
 }
 $i=0;
 echo('<hr>');
@@ -16,8 +17,9 @@ echo('<hr>');
 echo('PROJETS APRES FILTRAGE : <br />');
 $projects = GanttReaderDate::filterProjects($projects, $range);
 $i=0;
+if(isset($projects))
 foreach($projects as $project){
-	echo('Id : '.$project['id'].' | Debut : '.$project['debut'].' | Meeting : '.$project['meeting'].' | Duree : '.$project['duree'].' | Avancement : '.$project['avancement'].'| Index : '.$project['index'].'<br />');
+	echo('Id : '.$project['id'].' | Debut : '.$project['debut'].' | Meeting : '.$project['meeting'].' | Duree : '.$project['duree'].' | Avancement : '.$project['avancement'].'<br />');
 }
 $i=0;
 echo('<hr>');
@@ -34,6 +36,11 @@ echo("Timestamps min et max : <br />");
 echo("Earliest : $earliest soit ".date('Y-m',$earliest)." <br/>");
 echo("Lastest : $lastest soit ".date('Y-m',$lastest)." <hr>");
 
+//-------------------------------------
+
+echo('Fin de projet : <br />');
+echo('Projet 3 : début '.$projects[0]['debut'].' durée : '.$projects[0]['duree'].'<br />');
+echo('<hr>');
 //----------------------------------
 echo("Recalcul des limites... <br />");
 $newLimits = GanttReaderDate::windowRange($range, $projects);
@@ -60,11 +67,21 @@ echo '<hr>';
 echo('<br /> $earliest : '.date('d F Y', $earliest));
 
 //---------------------------
+echo('<hr>CONTRAINTES :  <br />');
+if(isset($constraints))
+foreach($constraints as $constraint)
+	echo($constraint['from'].' --> '.$constraint['to'].'<br />');
+echo('<hr>');
+
+echo('DUREES EFFECTIVES <br />');
+if(isset($projects))
+	foreach($projects as $project)
+		echo  $project['nom'].' : '.GanttReaderDate::ProjectLength($project, $vacations).'<br />';
+echo('<hr>');
 
 echo('<div id="ganttDiagram">');
-echo('<time style="left:'.((GanttReaderDate::gap($earliest, strtotime(date('Y-m-d', time())))*36)+200+35/2).'px;"></time>');
-echo GanttReaderDrawer::drawHeader($title, $vacations, $earliest, $lastest);
-echo GanttReaderDrawer::drawProjects($projects, $vacations, $earliest, $lastest);
+echo GanttReaderDrawer::drawHeader($title, $vacations, $earliest, $lastest, $constraints);
+echo GanttReaderDrawer::drawProjects($projects, $vacations, $earliest, $lastest, $constraints);
 echo('</div>');
 
 
