@@ -10,7 +10,7 @@ class GanttReaderDrawer{
 	/*
 	 *
 	 */
-	function drawDiagram($title, &$projects, &$vacations, &$constraints, $earliest, $lastest){
+	static function drawDiagram($title, &$projects, &$vacations, &$constraints, $earliest, $lastest){
 	$out='';
 	$out.=('<div id="ganttDiagram">');
 	$out.= GanttReaderDrawer::drawTitle($title);
@@ -54,7 +54,7 @@ class GanttReaderDrawer{
 		return $out;
 	}
 	
-	function drawSider(&$projects){
+	static function drawSider(&$projects){
 		$out='<div id="ganttSider"><table>';
 		
 		//d'abord écrire les titres
@@ -70,7 +70,7 @@ class GanttReaderDrawer{
 		return $out;
 	}
 	
-	function drawTitle($title){
+	static function drawTitle($title){
 		$out= '<div id="ganttTitle" class="ganttEmbed">'.$title.'</div>';
 		return $out;
 	}
