@@ -6,7 +6,6 @@
 
 
 /*  Récupération des paramètres back-end  */
-$title = $params->get('title');
 
 $range = $params->get('range');
 
@@ -23,6 +22,14 @@ $titleColor = $params->get('titleColor');
 $textColor = $params->get('textColor');
 
 $todayColor = $params->get('todayColor');
+switch(JFactory::getLanguage()->getName()){
+	case 'French (fr-FR)':
+		$title = $params->get('frenchTitle');
+	break;
+	
+	default:
+		$title = $params->get('englishTitle');
+}
 
 //Ajout des styles parametrés
 $styles = 	'

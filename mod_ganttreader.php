@@ -20,13 +20,9 @@ require_once(dirname(__FILE__).'/models/parser.php');
 
 require_once(dirname(__FILE__).'/models/date.php');
 
-require_once(dirname(__FILE__).'/models/project.php');
-
 require_once(dirname(__FILE__).'/models/drawer.php');
 
 require_once(dirname(__FILE__).'/helper.php');
-
-
 
 //Finally, loads the view
 require( JModuleHelper::getLayoutPath( 'mod_ganttreader', $params->get('layout') ) );

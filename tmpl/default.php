@@ -3,5 +3,4 @@
 
 GanttReaderDrawer::drawDiagram($title, $projects, $vacations, $constraints, $earliest, $lastest);
 
-
 ?>

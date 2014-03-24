@@ -28,11 +28,18 @@
 			<fieldset name="basic">
 			
 				<field
-				name="title" 
+				name="frenchTitle" 
 				type="text" 
 				default="Planning prévisionnel"
-				label="MOD_GANTTREADER_TITLE_LABEL"
-				description="MOD_GANTTREADER_TITLE_DESC"/>
+				label="MOD_GANTTREADER_FRENCH_TITLE_LABEL"
+				description="MOD_GANTTREADER_FRENCH_TITLE_DESC"/>
+				
+				<field
+				name="englishTitle" 
+				type="text" 
+				default="Anticipated schedule"
+				label="MOD_GANTTREADER_ENGLISH_TITLE_LABEL"
+				description="MOD_GANTTREADER_ENGLISH_TITLE_DESC"/>
 			
 			
 				<field name="range"
