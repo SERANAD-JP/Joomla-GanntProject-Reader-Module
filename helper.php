@@ -26,7 +26,7 @@ $todayColor = $params->get('todayColor');
 
 //Ajout des styles parametrés
 $styles = 	'
-			#ganttDiagram{
+			#ganttDiagram, .dayBox{
     			background-color:'.$dayBoxColor.';
 				color:'.$textColor.';
 			}
@@ -41,6 +41,7 @@ $styles = 	'
 			
 			marker, path{
 				background-color:'.$constraintColor.';
+				stroke:'.$constraintColor.';
 			}
 			
 			td.dayOff{

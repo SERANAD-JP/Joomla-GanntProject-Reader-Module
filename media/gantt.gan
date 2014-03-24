@@ -58,9 +58,7 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="0" name="BDDGEstionV2_Tot" color="#8cb6ce" meeting="false" start="2014-03-20" duration="4" complete="100" expand="true">
-            <depend id="25" type="2" difference="0" hardness="Strong"/>
-        </task>
+        <task id="0" name="BDDGEstionV2_Tot" color="#8cb6ce" meeting="false" start="2014-03-20" duration="4" complete="100" expand="true"/>
         <task id="2" name="Ajouter Status" color="#8cb6ce" meeting="false" start="2014-03-11" duration="2" complete="25" expand="true">
             <depend id="7" type="2" difference="0" hardness="Strong"/>
         </task>
@@ -83,7 +81,7 @@ Proposition de modifier les non permanents cout annualisée par une colonne édi
 ]]></notes>
             <depend id="17" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="17" name="Reunion Modification Salaire" color="#8cb6ce" meeting="true" start="2014-03-18" duration="0" complete="100" expand="true">
+        <task id="17" name="Reunion Modif Salaires" color="#8cb6ce" meeting="true" start="2014-03-18" duration="0" complete="100" expand="true">
             <depend id="14" type="2" difference="0" hardness="Strong"/>
         </task>
         <task id="14" name="Debuggage v1" color="#8cb6ce" meeting="false" start="2014-03-18" duration="2" complete="75" expand="true">
@@ -92,13 +90,7 @@ et problèmes d'affichage conditionnel liée au status.]]></notes>
             <depend id="0" type="2" difference="0" hardness="Strong"/>
             <depend id="22" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="22" name="Reunion Debug" color="#8cb6ce" meeting="true" start="2014-03-20" duration="0" complete="0" expand="true">
-            <depend id="25" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="25" name="Tests nouvelle version" color="#8cb6ce" meeting="false" start="2014-03-26" duration="1" complete="0" expand="true"/>
-        <task id="26" name="tâche_26" color="#8cb6ce" meeting="false" start="2014-03-10" duration="1" complete="100" expand="true">
-            <depend id="2" type="2" difference="0" hardness="Strong"/>
-        </task>
+        <task id="22" name="Reunion Debug" color="#8cb6ce" meeting="true" start="2014-03-20" duration="0" complete="0" expand="true"/>
     </tasks>
     <resources>
         <resource id="1" name="Gostan" function="Default:1" contacts="gostan@lepetitpapanoel.com" phone="0467655421"/>

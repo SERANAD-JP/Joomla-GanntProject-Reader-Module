@@ -2,12 +2,13 @@
 /* CSS Document */
 
 #ganttDiagram{
-	max-height:300px;
-    max-width:100%;
-	overflow:auto;
-	float:left;
-	display:block;;
 	position:relative;
+	float:left;
+	height:300px;
+    width:100%;
+	overflow:auto;
+    
+	
 }
 
 .ganttProject, .ganttProjectStart, .ganttProjectEnd{
@@ -24,7 +25,6 @@
 }
 
 .ganttProject{
-    margin:0;
     margin-right:-1px;
 }
 
@@ -40,7 +40,7 @@
 }
 
 .ganttProjectEnd{
-	width:90%;
+	width:85%;
 
 	border-right:1px solid black;
 	border-top-right-radius:3px;;
@@ -50,66 +50,91 @@
     
 }
 
-path{
-	stroke:white;
-	stroke-width:5px;
-    stroke-linecap:round;
-    fill:none;
-}
 
-table{
-	border:thin solid black;
-	border-collapse:collapse;
-	
-}
 
-table.ganttHeader{
-	float:left;
-	box-shadow:0 2px 2px black;
-	z-index:1;
-}
 
-.ganttEmbed{ /*Titre et marqueur aujourd'hui*/
+.ganttEmbed{ /*Titre*/
     text-transform:uppercase;
     font-weight:bold;
     
 }
 
 
-time{
+time{/*marqueur aujourd'hui*/
 	position:absolute;
 	top: 72px;
-	width: 2px;
-	background: #66FEE5;
-	bottom: 0;
-	z-index: 1000;
-	text-indent: -12000px;
-	-webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 0 10px;
-	-moz-box-shadow: rgba(0, 0, 0, 0.3) 0 0 10px;
-	box-shadow: rgba(0, 0, 0, 0.3) 0 0 10px;
+	width: 2px;	
+	z-index: 3;
 }
 
 .ganttObject{
 	position:absolute;
-	float:left;
-    z-index:1;
+    z-index:2;
+	max-height:399px;
+}
+
+path{
+	stroke-width:3px;
+    stroke-linecap:round;
+    fill:none;
 }
 
 
-
-td{
+#ganttDiagram table td{
+    
 	text-align:center;
-	border:thin solid black;
+	border:1px solid rgba(0,0,0,0.5);
 	height:35px;
+    
 	min-width:35px;
-    padding:0;
+    max-width:35px;
+    padding:0; /* /!\ Look out if awkward spacing /!\ */
 }
 
-td.ganttSider{
-	min-width: 199px;
-	border-right: 1px solid #000b0d;
+
+#ganttHeader{ /*Mois et jours*/
+	position:relative;
+	left:200px;
+    width:480px;
+	box-shadow:0 2px 2px black;
+    font-weight:bold;
+    overflow:hidden;
+    z-index:4;
+}
+
+#ganttSider{
+    position:absolute;
+    left:0;
+    top:72px;
+	width: 199px;
+    height:206px;
+    overflow:hidden;
+	border-right: 1px solid rgba(0,0,0,1); 
 	box-shadow:2px 0 2px black;
-	z-index: 2;
+	z-index:2;
 }
 
+#ganttSider table{
+    width:100%;
+    height:9%;
+}
 
+#ganttDays{
+	position:absolute;
+    left:200px;
+    top:0px;
+    height:226px;
+    width:500px;
+    padding-top:72px;
+    overflow:auto;
+    
+}
+
+#ganttTitle{
+    position:absolute;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:200px;
+    height:72px;
+}
