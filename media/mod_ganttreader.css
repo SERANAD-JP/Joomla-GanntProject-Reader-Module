@@ -1,17 +1,15 @@
 @charset "utf-8";
 /* CSS Document */
 
-#ganttDiagram{
+#ganttDiagram{ /* Conteneur principal */
 	position:relative;
 	float:left;
 	height:300px;
     width:100%;
 	overflow:auto;
-    
-	
 }
 
-.ganttProject, .ganttProjectStart, .ganttProjectEnd{
+.ganttProject, .ganttProjectStart, .ganttProjectEnd{ /* Barres de projets */
 	width:auto;
 	height:85%;
     z-index:1;
@@ -29,7 +27,6 @@
 }
 
 .ganttProjectStart{
-
 	float:right;
 	width:100%;
 	border-left: 1px solid black;
@@ -41,17 +38,12 @@
 
 .ganttProjectEnd{
 	width:85%;
-
 	border-right:1px solid black;
 	border-top-right-radius:3px;;
 	border-bottom-right-radius:3px;
     margin-left:0px;
     margin-right:2px;
-    
 }
-
-
-
 
 .ganttEmbed{ /*Titre*/
     text-transform:uppercase;
@@ -63,24 +55,23 @@
 time{/*marqueur aujourd'hui*/
 	position:absolute;
 	top: 72px;
-	width: 2px;	
+	width:3px;	
 	z-index: 3;
 }
 
-.ganttObject{
+.ganttObject{ /* Etoiles et contraintes */
 	position:absolute;
     z-index:2;
-	max-height:399px;
 }
 
-path{
+path{ /* Trait de flèche */
 	stroke-width:3px;
     stroke-linecap:round;
     fill:none;
 }
 
 
-#ganttDiagram table td{
+#ganttDiagram table td{ /* Cases du diagramme */
     
 	text-align:center;
 	border:1px solid rgba(0,0,0,0.5);
@@ -88,7 +79,7 @@ path{
     
 	min-width:35px;
     max-width:35px;
-    padding:0; /* /!\ Look out if awkward spacing /!\ */
+    padding:0;
 }
 
 
@@ -102,11 +93,10 @@ path{
     z-index:4;
 }
 
-#ganttSider{
+#ganttSider{ /* Noms et avancement des projets (à gauche) */
     position:absolute;
-    left:0;
     top:72px;
-	width: 199px;
+	width: 200px;
     height:206px;
     overflow:hidden;
 	border-right: 1px solid rgba(0,0,0,1); 
@@ -116,10 +106,9 @@ path{
 
 #ganttSider table{
     width:100%;
-    height:9%;
 }
 
-#ganttDays{
+#ganttDays{ /* Conteneur des jours et des projets */
 	position:absolute;
     left:200px;
     top:0px;
@@ -130,7 +119,7 @@ path{
     
 }
 
-#ganttTitle{
+#ganttTitle{ /* Titre du diagramme */
     position:absolute;
     display:flex;
     align-items:center;

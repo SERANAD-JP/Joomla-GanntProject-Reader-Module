@@ -1,19 +1,23 @@
 <?php
 
-/*
+/***********************************************************************************************************************************
  * Modele de rendu
  * Recense les méthodes permettant d'obtenir un rendu visuel du diagramme
  * @return par défaut des méthodes, sauf mention contraire : $out le rendu visuel en HTML, prétraité pour le rendu dans le template
- */
+ ***********************************************************************************************************************************/
 class GanttReaderDrawer{
 	
 	/*
-	 *
+	 * @params le $title du diagrame, les tableaux des $projetcs, des $vacations, des $consraints 
+	 * 		et les dates limites du diagramme : $earliest et $lastest
+	 * @return void, affiche le rendu HTML du diagramme de Gantt
 	 */
 	static function drawDiagram($title, &$projects, &$vacations, &$constraints, $earliest, $lastest){
-	$out='';
-	$out.=('<div id="ganttDiagram">');
+		
+	$out=('<div id="ganttDiagram">');
+	
 	$out.= GanttReaderDrawer::drawTitle($title);
+	
 	$out.= GanttReaderDrawer::drawHeader($vacations, $earliest, $lastest, $constraints);
 
 	$out.= GanttReaderDrawer::drawSider($projects);
@@ -21,11 +25,14 @@ class GanttReaderDrawer{
 	$out.= GanttReaderDrawer::drawProjects($projects, $vacations, $earliest, $lastest, $constraints);
 	
 	$out.=('</div>');
+	
 	echo $out;
 	}
 
 	/*
-	 * @params la liste des $projects, la liste des $vacations et les dates en timestamps $timeA et $timeB entre lesquels il faut afficher le diagramme
+	 * @params les tableaux des $projects,des $vacations et les dates en timestamps $timeA et $timeB entre lesquels il faut afficher le diagramme
+	 * How : dans le conteneur ganttDays (dont les scrolls sont synchronisés avec d'autres éléments),
+	 *		Pour chaque projet à afficher, dessiner sa ligne et garder son padding (taille projet = durée + padding)
 	 */
 	static function drawProjects(&$projects, &$vacations, $timeA, $timeB, &$constraints){
 		
@@ -34,9 +41,10 @@ class GanttReaderDrawer{
 		$out='<div id="ganttDays" onscroll="'.
 				'document.getElementById(\'ganttSider\').scrollTop=this.scrollTop; '.
 				'document.getElementById(\'ganttHeader\').scrollLeft=this.scrollLeft;"'.
-				'>';
-		$out.='<table>';
-		//ensuite dessiner les projets eux-mêmes
+				'>'.
+				'<table>';
+
+		//dessiner les projets eux-mêmes
 		if(isset($projects)){
 			foreach($projects as $project){
 				$line = GanttReaderDrawer::drawLine($project, $vacations, $timeA, $timeB);
@@ -52,17 +60,20 @@ class GanttReaderDrawer{
 		return $out;
 	}
 	
+	/*
+	 * @param le tableau des $projects
+	 * dessine le bloc de gauche (titres des projets)
+	 */
 	static function drawSider(&$projects){
 		$out='<div id="ganttSider"><table>';
 		
-		//d'abord écrire les titres
+		//d'abord écrire les titres + % avancement
 		if(isset($projects)){
 			foreach($projects as $project){
 				$out.='<tr><td>'.$project['nom'].' ('.$project['avancement'].'%)</td></tr>';
 			}
-		} else{
-			$out.='<tr><td>(vide)</td></tr>';
 		}
+		
 		$out.='</table></div>';
 		
 		return $out;
@@ -98,52 +109,62 @@ class GanttReaderDrawer{
 	 * @params les timestamps $timeA et $timeB les dates entre lesquelles on veut la liste des mois
 	 */
 	static function drawMonths($timeA, $timeB){
+		
 		$months = GanttReaderDate::listMonths($timeA, $timeB);
 		$out='';
+		
 		foreach($months as $month){
-			
 			$out.='<td colspan="'.($month['length']).'" class="dayBox">'.$month['name'].'</td>';
-			
 		}
+		
 		return $out;
 	}
 	
+	/*
+	 * @params le timestamp de la premiere date du diagramme $earliest, le tableau des $constraints, des $projects et des $paddings
+	 */
 	static function drawObjects($earliest, $constraints, $projects, $paddings){
-		//Dessiner la barre d'aujourd'hui
+		
 		$out='<time style="height:'.(count($projects)*36).'px;'.
 		'left:'.((GanttReaderDate::gap($earliest, strtotime(date('Y-m-d', time())))*36)+35/2).'px;"></time>';
-		
-
 		
 		for($i=0; $i<count($constraints); $i++){
 			$out.=GanttReaderDrawer::drawConstraint($constraints[$i], $projects, $earliest, $paddings);
 		}
 		
-		
 		return $out;	
 	}
 	
 	/*
-	 *
+	 * @params la $constraint à dessiner, les tableaux des $projects et des $paddings et la date au plus tôt du diagramme $earliest
+	 * How : Calculer la taille du premier projet pour définir sa date de fin
+	 * 		 Calculer les coordonnées de départ de la contrainte (xA, yA) et d'arrivée (xB, yB)
+	 *		 abscisse = nombre de jours depuis la date au plus tôt * largeur des cases
+	 *		 ordonnée = index d'apparition du projet * hauteur des cases + 2 cases (+0.5 case si se place à mi-hauteur d'une case)
+	 *		 Chaque contrainte est ensuite modélisée dans un graphique SVG à partir de ses propriétés
+	 * @see www.w3.org/Graphics/SVG/
 	 */
 	static function drawConstraint($constraint, $projects, $earliest, $paddings){
 		
 		$projA = $projects[$constraint['from']];
 		$projB = $projects[$constraint['to']];
-		$add = $projA['duree']+$paddings[$constraint['from']];
 		
-		$endA = strtotime($projA['debut'].'+'.$add.'days');
+		$add = $projA['duree']+$paddings[$constraint['from']]; //durée réelle du projet
+		
+		$endA = strtotime($projA['debut'].'+'.$add.'days'); //fin du projet source : date de début + durée + décalage
+		
 		$startB = strtotime($projB['debut']);		
 		
 		$xA = GanttReaderDate::gap($earliest, $endA)*36;
 		$yA = $constraint['from']*36+35*2.5;
+		
 		$xB = GanttReaderDate::gap($earliest, $startB)*36+35/2;
 		$yB = $constraint['to']*36+35*2;
 		
 
 		
 		if($endA > $startB){ //si départ et arrivée le même jour (meetings)
-			$xA = $xB; //ne pas déplacer horizontalement
+			$xA = $xB; 		//ne pas déplacer horizontalement
 			
 			/* On corrige les hauteurs de départ */
 			if($constraint['from']>$constraint['to']){ //si viens d'en bas
@@ -160,7 +181,6 @@ class GanttReaderDrawer{
 			$yB = $yB + 31+10; //point d'arrivée par le bas
 		}
 		
-		//echo('yA : '.$yA.'; yB : '.$yB.'. Diff = '.abs($yA-$yB).'<br />');
 		
 		$out='	<?xml version="1.0" encoding="utf-8"?>
 				<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
@@ -185,10 +205,9 @@ class GanttReaderDrawer{
        						style="fill:white; fill-rule:evenodd; stroke:white; 
 							stroke-width:1px; stroke-linecap:round; stroke-linejoin:round; stroke-opacity:1" />
 					</marker>
+					
 				</defs>
-				
-				<!--<rect x="0" y="0" width="100%" height="100%" fill="red" fill-opacity:"0.5" />-->
-				
+								
 				<!-- Le tracé de la contrainte elle-même -->
 				<path 
 					class="ganttObject" 
@@ -250,7 +269,7 @@ class GanttReaderDrawer{
 	/*
 	 * @params le $project à dessiner, le tableau des $vacations et les dates timestamps $timeA et $timeB de début et de fin du diagramme
 	 * How : on dessine les cases vides avant le projet, 
-	 *		on récupère le rendu du projet et la taille du surplus (décalage à droite),
+	 *		on récupère le rendu du projet et la taille du surplus (décalage à droite = padding),
 	 * 		on dessine le projet puis les cases vides qui suivent le projet (de fin du projet + décalage à fin de la fenêtre)
 	 */
 	static function drawLine($project, $vacations, $timeA, $timeB){
@@ -274,6 +293,7 @@ class GanttReaderDrawer{
 	/*
 	 * @params le $project et le tableau des $vacations
 	 * @return array(['out'] => le rendu du projet lui-même, ['padding'] => le décalage à droite créé par les jours de congé)
+	 * @see www.w3.org/Graphics/SVG/
 	 */
 	static function drawProject($project, $vacations){
 		$out='';
@@ -290,7 +310,6 @@ class GanttReaderDrawer{
 			}
 			$out.='">';
 			$padding++; //correction du fait que les meetings durent 0 jours selon GanttProject
-			
 			
 			/*Dessin vectoriel SVG d'une étoile*/
 			
@@ -330,8 +349,6 @@ class GanttReaderDrawer{
 								stroke-opacity:1" />
   					
 					</svg>';
-					
-					
 			
 			$out.='</td>';
 			
@@ -352,7 +369,7 @@ class GanttReaderDrawer{
 		}
 		
 		 else{
-			 
+		
 		/*Dessin du premier jour*/
 		$out.='<td class="dayBox';
 			  
@@ -383,7 +400,7 @@ class GanttReaderDrawer{
 		$out.='<div style="background-color:'.$project['couleur'].'" class="ganttProject';
 		if(GanttReaderDate::completed($project, $actuel, $vacations)){
 				$out.=' complete';
-			}
+		}
 		$out.='">';
 		$out.='</div>';
 		$out.='</td>';

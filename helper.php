@@ -32,7 +32,7 @@ $todayColor = $params->get('todayColor'); //couleur de la barre marquant la date
 
 /* On vérifie si les couleurs du backEnd fournies sont correctes(correspondent au masque "#ABCDEF")*/
 
-$colorPattern='(#{1}(?:[A-F0-9]){6})(?![0-9A-F])';	# Pattern de regExp pour une couleur Hexa
+$colorPattern='(#{1}(?:[A-F0-9]){6})(?![0-9A-F])';	# Pattern de regex pour une couleur Hexa
 
 if (!preg_match_all ("/".$colorPattern."/is", $defaultColor, $matches))
 {

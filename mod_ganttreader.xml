@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+   
 
 <extension type="module" version="3.0.0" client="site" method="upgrade">
 	<name>GanttReader</name>
@@ -7,6 +8,7 @@
 	<description>MOD_GANTTREADER_DESCRIPTION</description>
 	
 	<files>
+		<!-- fichiers et dossiers à inclure dans Joomla -->
 		<filename>mod_ganttreader.xml</filename>
 		<filename module="mod_ganttreader">mod_ganttreader.php</filename>
 		<filename>index.html</filename>
@@ -17,6 +19,7 @@
 	</files>
 	
 	<media folder="media" destination="mod_ganttreader">
+		<!-- Ressources à fournir -->
 		<filename>gantt.gan</filename>
 		<filename>stripes.png</filename>
 		<filename>mod_ganttreader.css</filename>
