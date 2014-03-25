@@ -10,12 +10,13 @@ class GanttReaderParser{
 	 * @return array() le tableau des projets organisées selon clé => valeur
 	 * chaque projet se présente en tableau associatif contenant chacune des informations extraites
 	 */
-	static function getProjects(&$gan, $defaultColor="#a9890a"){
+	static function getProjects(&$gan, $defaultColor){
 		$projects = NULL;	//valeur par défaut, évite les diagrammes vides
-		$index=0;
+		if(isset($gan->tasks)){
 		foreach($gan->tasks->task as $task){
 			$id = $task->attributes()->id->__toString();
 			$nom = $task->attributes()->name->__toString();
+			
 
 			$couleur = isset($task->attributes()->color) ? /*si couleur non précisée, prendre celle par défaut*/
 				$task->attributes()->color->__toString() : 
@@ -38,9 +39,9 @@ class GanttReaderParser{
 							'meeting' =>$meeting,
 							'notes' => $notes
 							);
-			$index++;
+			
 		}
-
+		}
 		
 		return $projects;
 	}

@@ -3,7 +3,6 @@
 defined('_JEXEC') or die('Restricted access');
 
 //Picks-up media files
-$gan = simplexml_load_file(JPATH_SITE.'/media/mod_ganttreader/gantt.gan');
 
 $document = JFactory::getDocument();
 
@@ -26,7 +25,5 @@ require_once(dirname(__FILE__).'/helper.php');
 
 //Finally, loads the view
 require( JModuleHelper::getLayoutPath( 'mod_ganttreader', $params->get('layout') ) );
-
-
 
 ?>

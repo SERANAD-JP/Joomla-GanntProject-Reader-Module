@@ -40,6 +40,24 @@
 				default="Anticipated schedule"
 				label="MOD_GANTTREADER_ENGLISH_TITLE_LABEL"
 				description="MOD_GANTTREADER_ENGLISH_TITLE_DESC"/>
+				
+				<field
+					name="isLocal"
+					type="radio"
+					class="btn-group btn-group-yesno"
+					default="1"
+					label="MOD_GANTTREADER_ISLOCAL_LABEL"
+					description="MOD_GANTTREADER_ISLOCAL_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				
+				<field
+				name="path"
+				type="text" 
+				default="media/mod_ganttreader/gantt.gan"
+				label="MOD_GANTTREADER_PATH_LABEL"
+				description="MOD_GANTTREADER_PATH_DESC"/>
 			
 			
 				<field name="range"

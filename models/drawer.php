@@ -43,8 +43,6 @@ class GanttReaderDrawer{
 				$out.=$line['out'];
 				$paddings[] = $line['padding']; //stocker les décalages pour ensuite dessiner les contraintes
 			}
-		} else{
-			$out.='<tr><td  style=" font-weight:bold; color:red;">&nbsp;'.JText::_('MOD_GANTTREADER_ERROR_NOPROJECT').'</td></tr>';
 		}
 		
 		//ensuite dessiner les objets ([barre d'aujourd'hui et] contraintes) entre les projets
