@@ -144,7 +144,7 @@ if(empty($projects)){
 } else{
 	$projects = GanttReaderDate::filterProjects($projects, $range); //filtrage des projets à afficher
 	if(empty($projects)){
-		$errors.=Jext::_('MOD_GANTTREADER_NOTHINGTODISPLAY_ERROR').'<br />';
+		$errors.=Jtext::_('MOD_GANTTREADER_NOTHINGTODISPLAY_ERROR').'<br />';
 	}
 }
 

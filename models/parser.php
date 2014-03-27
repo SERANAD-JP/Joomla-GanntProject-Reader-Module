@@ -6,7 +6,7 @@
  ************************************************************************************/
 class GanttReaderParser{
 	
-	/*
+	/**
 	 * @params SimpleXMLElement $gan l'instance du parseur (contient déjà les infos) et la couleur par défaut des projets $defaultColor
 	 * @return array() le tableau des projets organisées selon clé => valeur
 	 * chaque projet se présente en tableau associatif contenant chacune les informations extraites
@@ -16,17 +16,34 @@ class GanttReaderParser{
 		
 		if(isset($gan->tasks)){
 			foreach($gan->tasks->task as $task){
-				$id = $task->attributes()->id->__toString();
+				
+				GanttReaderParser::getProjectProperties($task, $gan, $defaultColor, $projects);
+			}
+		}
+		
+		return $projects;
+	}
+	
+	/**
+	 * @param $task la tâche à insérer
+	 * @param $gan l'instance du parseur XML
+	 * @param $defaultColor, la couleur par défaut des projets
+	 * @param $projects le tableau des projets à compléter avec l'ajout du projet actuel
+	 */
+	 static function getProjectProperties($task, &$gan, $defaultColor,&$projects){
+		 
+		 		//TODO si n'a pas d'enfant task, renvoyer la suite, sinon renvoyer le tableau de retour des enfants
+				//NB noter récursif
+		 
+		 		$id = $task->attributes()->id->__toString();
 				$nom = $task->attributes()->name->__toString();
 				
-	
 				$couleur = isset($task->attributes()->color) ? /*si couleur non précisée, prendre celle par défaut*/
 					$task->attributes()->color->__toString() : 
 					$defaultColor; 
 					
 				$debut = $task->attributes()->start->__toString();
-				$meeting = $task->attributes()->meeting->__toString();
-				$meeting = $meeting==='true';
+				$meeting = $task->attributes()->meeting->__toString()==='true';
 				$duree = $task->attributes()->duration->__toString();
 				$avancement = $task->attributes()->complete->__toString();
 				
@@ -41,11 +58,14 @@ class GanttReaderParser{
 								'meeting' =>$meeting,
 								
 								);
-			}
-		}
-		
-		return $projects;
-	}
+								
+				if(isset($task->task)){ //s'il existe une sous-tâche de cette tâche
+					foreach($task->task as $subTask){
+						GanttReaderParser::getProjectProperties($subTask, $gan, $defaultColor, $projects);
+					}
+				}
+				
+	 }
 	
 	/*
 	 * @param SimpleXMLElement $gan l'instance du parseur du diagramme de gantt et la liste des $projects extraits
@@ -66,6 +86,7 @@ class GanttReaderParser{
 		
 		foreach($projects as $project){ //établir le lien id => index pour chaque projet
 			$indexes[$project['id']] = $i++;	
+			echo('$indexes['.$project['id'].'] = '.$i.'<br />');
 		}
 		
 		
