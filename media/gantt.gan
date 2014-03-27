@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="BDDGestionPerso" company="" webLink="http://" view-date="2014-03-07" view-index="0" gantt-divider-location="353" resource-divider-location="300" version="2.0" locale="fr">
+<?xml version="1.0" encoding="UTF-8"?><project name="BDDGestionPerso" company="" webLink="http://" view-date="2014-03-04" view-index="0" gantt-divider-location="353" resource-divider-location="300" version="2.0" locale="fr">
     <description><![CDATA[Mise en place de la version 2 de la Base de Donnée de Gestion du Personnelle de l'IGMM sous Access : 2 Personnes impliquée T et Y.
 ]]></description>
     <view zooming-state="default:2" id="gantt-chart">
@@ -58,19 +58,14 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="0" name="BDDGEstionV2_Tot" color="#8cb6ce" meeting="false" start="2014-03-20" duration="4" complete="100" expand="true"/>
-        <task id="2" name="Ajouter Status" color="#8cb6ce" meeting="false" start="2014-03-11" duration="2" complete="25" expand="true">
-            <depend id="7" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="7" name="Reunion Francoise &amp; Yoann" color="#8cb6ce" meeting="true" start="2014-03-13" duration="0" complete="0" thirdDate="2014-03-11" thirdDate-constraint="1" expand="true">
-            <notes><![CDATA[pas eu le temps de tester a fond les status ajoutés
-mais info positive sur l'ajourt qui semblait compliqué (vaccataire qui devient un statut comme un autre)
-Master1 ET 2 sont également des stagiaires comme les autres
-
-QUESTION EN DEBAT : Doit on changer les cout annulalisés (salaire brut actuellement) en cout total ? en salaire net ?
-
-]]></notes>
-            <depend id="10" type="2" difference="0" hardness="Strong"/>
+        <task id="2" name="BDDGEstionV2_Tot" color="#8cb6ce" meeting="false" start="2014-03-07" duration="10" complete="66" expand="true">
+            <task id="0" name="BDDGEstionV3_Tot" color="#8cb6ce" meeting="false" start="2014-03-10" duration="4" complete="100" expand="true">
+                <depend id="23" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="23" name="Tache, again" color="#8cb6ce" meeting="false" start="2014-03-14" duration="5" complete="0" expand="true"/>
+            <task id="24" name="Encore une sous-tâche" meeting="false" start="2014-03-07" duration="1" complete="0" expand="true">
+                <depend id="0" type="2" difference="0" hardness="Strong"/>
+            </task>
         </task>
         <task id="10" name="Modification Salaires" color="#ffcc00" meeting="false" start="2014-03-13" duration="3" complete="50" expand="true">
             <notes><![CDATA[Modifier les noms des colonnes cout annualisé (par salaire net-brute annualisé et/ou cout total annualisé)
@@ -79,18 +74,7 @@ L'ajout modulation ne concerne que les non permanents
 
 Proposition de modifier les non permanents cout annualisée par une colonne éditrice manuellement (l'information n'est plus calculé mais elle est édité) elle serait appelé cout total annualisé
 ]]></notes>
-            <depend id="17" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="17" name="Reunion Modif Salaires" color="#8cb6ce" meeting="true" start="2014-03-18" duration="0" complete="100" expand="true">
-            <depend id="14" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="14" name="Debuggage v1" color="#8cb6ce" meeting="false" start="2014-03-18" duration="2" complete="75" expand="true">
-            <notes><![CDATA[debug de la V1 Affichage contrat (voir toutes les infos)
-et problèmes d'affichage conditionnel liée au status.]]></notes>
-            <depend id="0" type="2" difference="0" hardness="Strong"/>
-            <depend id="22" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="22" name="Reunion Debug" color="#8cb6ce" meeting="true" start="2014-03-20" duration="0" complete="0" expand="true"/>
     </tasks>
     <resources>
         <resource id="1" name="Gostan" function="Default:1" contacts="gostan@lepetitpapanoel.com" phone="0467655421"/>

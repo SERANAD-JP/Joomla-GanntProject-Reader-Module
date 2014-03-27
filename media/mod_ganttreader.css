@@ -52,7 +52,7 @@
 }
 
 
-time{/*marqueur aujourd'hui*/
+#time{/*marqueur aujourd'hui*/
 	position:absolute;
 	top: 72px;
 	width:3px;	

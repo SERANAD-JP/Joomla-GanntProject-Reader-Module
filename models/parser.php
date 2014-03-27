@@ -46,7 +46,7 @@ class GanttReaderParser{
 				$meeting = $task->attributes()->meeting->__toString()==='true';
 				$duree = $task->attributes()->duration->__toString();
 				$avancement = $task->attributes()->complete->__toString();
-				
+				$hasChild = isset($task->task);
 				
 				$projects[] = array(
 								'id' => $id,
@@ -56,7 +56,7 @@ class GanttReaderParser{
 								'duree' => $duree,
 								'avancement' => $avancement,
 								'meeting' =>$meeting,
-								
+								'hasChild' => $hasChild,
 								);
 								
 				if(isset($task->task)){ //s'il existe une sous-tâche de cette tâche
@@ -86,7 +86,7 @@ class GanttReaderParser{
 		
 		foreach($projects as $project){ //établir le lien id => index pour chaque projet
 			$indexes[$project['id']] = $i++;	
-			echo('$indexes['.$project['id'].'] = '.$i.'<br />');
+			
 		}
 		
 		

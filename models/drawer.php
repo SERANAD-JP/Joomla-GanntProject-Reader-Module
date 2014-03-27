@@ -7,7 +7,7 @@
  ***********************************************************************************************************************************/
 class GanttReaderDrawer{
 	
-	/*
+	/**
 	 * @params le $title du diagrame, les tableaux des $projetcs, des $vacations, des $consraints 
 	 * 		et les dates limites du diagramme : $earliest et $lastest
 	 * @return void, affiche le rendu HTML du diagramme de Gantt
@@ -24,12 +24,14 @@ class GanttReaderDrawer{
 	
 	$out.= GanttReaderDrawer::drawProjects($projects, $vacations, $earliest, $lastest, $constraints);
 	
+	
+	
 	$out.=('</div>');
 	
 	echo $out;
 	}
 
-	/*
+	/**
 	 * @params les tableaux des $projects,des $vacations et les dates en timestamps $timeA et $timeB entre lesquels il faut afficher le diagramme
 	 * How : dans le conteneur ganttDays (dont les scrolls sont synchronisés avec d'autres éléments),
 	 *		Pour chaque projet à afficher, dessiner sa ligne et garder son padding (taille projet = durée + padding)
@@ -41,6 +43,7 @@ class GanttReaderDrawer{
 		$out='<div id="ganttDays" onscroll="'.
 				'document.getElementById(\'ganttSider\').scrollTop=this.scrollTop; '.
 				'document.getElementById(\'ganttHeader\').scrollLeft=this.scrollLeft;"'.
+				//'onLoad="this.scrollLeft="'.
 				'>'.
 				'<table>';
 
@@ -125,8 +128,14 @@ class GanttReaderDrawer{
 	 */
 	static function drawObjects($earliest, $constraints, $projects, $paddings){
 		
-		$out='<time style="height:'.(count($projects)*36).'px;'.
-		'left:'.((GanttReaderDate::gap($earliest, strtotime(date('Y-m-d', time())))*36)+35/2).'px;"></time>';
+		$out='<div '.
+		
+		'style="height:'.(count($projects)*36).'px; '.
+		'left:'.(round((GanttReaderDate::gap($earliest, strtotime(date('Y-m-d', time())))*36)+35/2)).'px;" '.
+		
+		'id="time" '.
+		'>'.
+		'</div>';
 		
 		for($i=0; $i<count($constraints); $i++){
 			$out.=GanttReaderDrawer::drawConstraint($constraints[$i], $projects, $earliest, $paddings);
@@ -290,7 +299,7 @@ class GanttReaderDrawer{
 		return array('out' => $out, 'padding' => $line['padding']);
 	}
 	
-	/*
+	/**
 	 * @params le $project et le tableau des $vacations
 	 * @return array(['out'] => le rendu du projet lui-même, ['padding'] => le décalage à droite créé par les jours de congé)
 	 * @see www.w3.org/Graphics/SVG/
@@ -368,7 +377,7 @@ class GanttReaderDrawer{
 		$out.='"></div></td>';
 		}
 		
-		 else{
+		 else{ // cas classique : le projet dure pusieurs jours
 		
 		/*Dessin du premier jour*/
 		$out.='<td class="dayBox';
