@@ -8,7 +8,7 @@ class GanttReaderParser{
 	
 	/**
 	 * @params SimpleXMLElement $gan l'instance du parseur (contient déjà les infos) et la couleur par défaut des projets $defaultColor
-	 * @return array() le tableau des projets organisées selon clé => valeur
+	 * @return un array() le tableau des projets organisées selon clé => valeur
 	 * chaque projet se présente en tableau associatif contenant chacune les informations extraites
 	 */
 	static function getProjects(&$gan, $defaultColor){
