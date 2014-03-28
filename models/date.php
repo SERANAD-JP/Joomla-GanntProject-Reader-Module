@@ -91,7 +91,7 @@ class GanttReaderDate{
 	
 	
 	/*
-	 * @params les timestamps $dateA et $dateB entre lesquels il faut mesure l'écart
+	 * @params les timestamps $dateA et $dateB entre lesquels il faut mesurer l'écart
 	 * @return int le nombre de jours entre les deux dates
 	 */
 	static function gap($dateA, $dateB){
@@ -101,8 +101,8 @@ class GanttReaderDate{
 		return $diff->days;
 	}
 	
-	/*
-	 * @param le $timestamp du jour a étudier, la $dateA du premier jour de la fenêtre , la $dateB du dernier jour de la fenêtre
+	/**
+	 * @params le $timestamp du jour a étudier, la $dateA du premier jour de la fenêtre , la $dateB du dernier jour de la fenêtre
 	 * NB : les dates sont en timestamps
 	 * @return true si le $timestamp est compris entre $dateA et $dateB, faux sinon
 	 */
@@ -113,9 +113,9 @@ class GanttReaderDate{
 	/*
 	 * @params le $project, le numero de la $case à traiter (de 0 à [durée projet]) et la liste des $vacations
 	 */
-	 static function completed($project, $case, &$vacations){
+	 static function completed($project, $case){
 		 
-		$duree = GanttReaderDate::projectLength($project, $vacations);
+		$duree = $project['longueur'];
 		$rapport = round((($case+1)/$duree)*100); //rapport entre l'avancement relatif de la case sur l'avancement réel
 
 		 return ($rapport<=($project['avancement'])); // true si l'avancement "recouvre" la case actuelle 
@@ -155,7 +155,9 @@ class GanttReaderDate{
 	  *		['vacation'] => (boolean) estEnVacance
 	  *		['today'] => (boolean) estAujourd'hui
 	 */
-	static function listDays($timeA, $timeB, $vacations){
+	static function listDays($timeA, $timeB, &$vacations){
+		
+		
 		
 		$current = $timeA; //pointer sur le premier jour
 		
@@ -170,6 +172,7 @@ class GanttReaderDate{
 			
 		} while($current<=$timeB);
 		
+
 		return $days;
 	}
 	
@@ -177,13 +180,15 @@ class GanttReaderDate{
 	 * @params $range la taille originelle de la fenêtre, $project le projet à traiter
 	 * @return true si le projet est censé être affiché dans le rendu (i.e au moins une partie se trouve dans la fenêtre), false sinon
 	 */
-	 static function inWindow($range, $project){
+	 static function inWindow($range, $project, &$vacations){
 		$earliest = GanttReaderDate::earliestMonth($range);
 		$lastest = GanttReaderDate::lastestMonth($range);
 		
 		
 			$start = strtotime($project['debut']);	//début puis fin de la fenêtre originelle
-			$end = strtotime('+'.$project['duree'].' days', $start); //fin = début + durée
+			$end = strtotime('+'.$project['longueur'].' days', $start); //fin = début + durée
+			
+		
 			
 			return(
 				GanttReaderDate::inSight($start, $earliest, $lastest)||	//Si début inclus
@@ -195,26 +200,32 @@ class GanttReaderDate{
 	 * @params la taille originelle de la fenêtre, le tableau des $projects
 	 * @return array() ['min'], ['max'] le début et la fin que devrait avoir la fenêtre
 	 * Pré-requis : avoir filtré les projets qui sont complètement hors champ au préalable.
+	 * OBSOLETE
 	 */
-	 static function windowRange($range, $projects){
+	 static function windowRange($range, &$projects){
 		$earliest = GanttReaderDate::earliestMonth($range); //limites d'origine de la fenêtre
 		$lastest = GanttReaderDate::lastestMonth($range);
 		
+		
 		$min = $earliest; //nouvelles limites, à adapter
 		$max = $lastest;
+		
+		
 		if(isset($projects)){
-		foreach($projects as $project){
-			$start = strtotime($project['debut']);	//début et fin de la frontière originelle
-			$end = strtotime('+'.$project['duree'].' days', $start);
-			
-
-			if(GanttReaderDate::inSight($lastest, $start, $end)){//si plus tard que la fenêtre
-				$max = $end;
-			}
-			if(GanttReaderDate::inSight($earliest, $start, $end)){//si plus tôt que la fenêtre
-				$min = $start;
-			}
-		}
+		  foreach($projects as $project){
+			  $start = strtotime($project['debut']);	//début et fin de la frontière originelle
+			  $end = strtotime('+'.$project['longueur'].' days', $start);
+			  
+  
+			  if(GanttReaderDate::inSight($max, $start, $end)){//si plus tard que la fenêtre
+				  $max = $end;
+			  }
+			  
+			  if(GanttReaderDate::inSight($min, $start, $end)){//si plus tôt que la fenêtre
+			  		echo('earliest est resizé de '.date('d m Y', $min).' à '.date('d m Y', $start).' par '.$project['id']);
+				  $min = $start;
+			  }
+		  }
 		}
 		$min = GanttReaderDate::earliestMonth(0, $min); //on élargit au début et à la fin des mois pour avoir des mois complets
 		$max = GanttReaderDate::lastestMonth(0, $max);
@@ -229,15 +240,15 @@ class GanttReaderDate{
 	 * @params l'array des projets source, $range le nombre de mois autour de la date courante à conserver
 	 * @return l'array des projets, filtrés (i.e qui devront apparaitre dans le rendu)
 	 */
-	static function filterProjects($projects, $range){	
+	static function filterProjects(&$projects, $range, &$vacations){	
 	
 	$out = NULL;//(protège de l'absence de projets dans la fenêtre)
 	  	
 		  if(isset($projects)){
 			foreach($projects as &$project){
 				
-				if(GanttReaderDate::inWindow($range, $project)){
-					$out[]=$project;	
+				if(GanttReaderDate::inWindow($range, $project, $vacations)){
+					$out[]=$project;
 				}
 			}
 		}
@@ -250,23 +261,23 @@ class GanttReaderDate{
 	 * How : parcourir le projet depuis la date de début et ce, sur la durée du projet.
 	 * NB : GanttProject ne compte que les jours ouvrés, on n'augmente pas le compteur total quand il s'agit d'un jour de repos
 	 */
-	 static function projectLength($project, $vacations){
+	 static function projectLength($debut, $duree, $vacations){
 		
-		 $duree = 1; //compteur de l'avancement total
+		 $longueur = 1; //compteur de l'avancement total
 		 $i=0; //compteur de l'avancement nominal
-		 $current = strtotime($project['debut']);
+		 $current = strtotime($debut);
 		 
-		 while($i<$project['duree']-1){
+		 while($i<$duree-1){
 			 			 
 			 $i++;
 			 $current = strtotime('+1 day', $current);
-			 $duree++;
+			 $longueur++;
 			 
 			 if(GanttReaderDate::inRest($current, $vacations)){
 				$i--; 
 			 }
 		 }
-		 return $duree;
+		 return $longueur;
 	 }
 }
 

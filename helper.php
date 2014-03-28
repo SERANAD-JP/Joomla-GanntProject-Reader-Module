@@ -108,7 +108,7 @@ $styles = 	'
 				color:'.$titleColor.';
 			}
 			
-			time{
+			#time{
 				background-color:'.$todayColor.';
 			}
 			
@@ -133,29 +133,31 @@ $styles = 	'
 			';
 
 $document->addStyleDeclaration($styles);
-
+$earliest = GanttReaderDate::earliestMonth($range); //mois le plus ancien à afficher
+$lastest = GanttReaderDate::lastestMonth($range); //mois le plus avancé à afficher
 
 /*  Extraction des infos depuis le fichier GanttProject  */
-	
-$projects = GanttReaderParser::getProjects($gan, $defaultColor); //extraction brute
+$vacations = GanttReaderParser::getVacations($gan); //extraction des plages de congés
+
+$projects = GanttReaderParser::getProjects($gan, $vacations, $defaultColor, $earliest, $lastest); //extraction brute
 
 if(empty($projects)){
 	$errors.=JText::_('MOD_GANTTREADER_EMPTYDIAGRAM_ERROR').'<br />';
 } else{
-	$projects = GanttReaderDate::filterProjects($projects, $range); //filtrage des projets à afficher
+	$projects = GanttReaderDate::filterProjects($projects, $range, $vacations); //filtrage des projets à afficher
+
 	if(empty($projects)){
 		$errors.=Jtext::_('MOD_GANTTREADER_NOTHINGTODISPLAY_ERROR').'<br />';
 	}
 }
 
-
 $constraints = GanttReaderParser::getConstraints($gan, $projects); //extraction des contraintes
 
-$vacations = GanttReaderParser::getVacations($gan); //extraction des plages de congés
 
-$earliest = GanttReaderDate::earliestMonth($range); //mois le plus ancien à afficher
 
-$lastest = GanttReaderDate::lastestMonth($range); //mois le plus avancé à afficher
+
+
+
 
 
 

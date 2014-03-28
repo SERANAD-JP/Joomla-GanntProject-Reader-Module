@@ -1,8 +1,7 @@
 <?php
 
 defined('_JEXEC') or die('Restricted access');
-
-//Récupération ds fichiers media
+//Récupération des fichiers media
 
 $document = JFactory::getDocument();
 

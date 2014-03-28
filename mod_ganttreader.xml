@@ -65,10 +65,10 @@
 			
 				<field name="range"
 					type="integer"
-					default="5"
+					default="1"
 					label="MOD_GANTTREADER_RANGE_LABEL"
 					description="MOD_GANTTREADER_RANGE_DESC"
-					first="1"
+					first="0"
 					last="6"
 					step="1"/>
 					

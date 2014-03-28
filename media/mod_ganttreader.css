@@ -22,6 +22,14 @@
 	opacity: .9;
 }
 
+.ganttFatherProject{
+    position:relative;
+    top:-13px;
+	height:10px;
+    margin-left:-1px;
+    margin-right:-1px;
+}
+
 .ganttProject{
     margin-right:-1px;
 }
