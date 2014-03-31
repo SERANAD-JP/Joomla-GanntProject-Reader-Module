@@ -123,7 +123,7 @@ path{ /* Trait de flèche */
     height:226px;
     width:500px;
     padding-top:72px;
-    overflow:auto;
+    overflow:scroll;
     
 }
 

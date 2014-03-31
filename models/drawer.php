@@ -163,7 +163,8 @@ class GanttReaderDrawer{
 		$projA = $projects[$constraint['from']];
 		$projB = $projects[$constraint['to']];
 				
-		$endA = strtotime($projA['debut'].'+'.$projA['longueur'].'days'); //fin du projet source : date de début + durée + décalage
+		$endA = strtotime($projA['debut'].'+'.($projA['longueur']+1).'days'); //fin du projet source : date de début + durée + décalage
+
 		
 		$startB = strtotime($projB['debut']);		
 		
@@ -182,6 +183,7 @@ class GanttReaderDrawer{
 			if($constraint['from']>$constraint['to']){ //si viens d'en bas
 				$yA = $yA -15;
 				$yB = $yB -15;
+
 			}elseif($constraint['to']>$constraint['from']){ //si viens d'en haut
 				$yA = $yA +10;
 				$yB = $yB + 10;
@@ -261,11 +263,12 @@ class GanttReaderDrawer{
 	
 	
 	/*
-	 * @params les dates timstamps $timeA et $timeB entre lesquelles on veut placer des jours vides et le tableau des $vacations
+	 * @params les dates timestamps $timeA et $timeB entre lesquelles on veut placer des jours vides et le tableau des $vacations
 	 * Action : dessine des jours vides (style spécial pour les jours vaqués) d'une date à une autre
 	 */
 	static function drawPadding($timeA, $timeB, &$vacations){
-		if($timeA>$timeB){ //Si erreur dans les paramètres ou padding hors-zone (résulte que timeB est avant timeA)
+		if($timeA>=$timeB){ //Si erreur dans les paramètres ou padding hors-zone (résulte que timeB est avant timeA)
+
 			return '';
 		}
 		
@@ -300,9 +303,14 @@ class GanttReaderDrawer{
 		$out.= GanttReaderDrawer::drawProject($project, $vacations, $timeA, $timeB); //array (rendu du projet + décalage)
 
 		
-		$after = strtotime('+'.($project['longueur']+1).' days', $before); //le décalage +1 jour après le projet
+		$after = strtotime('+'.($project['longueur']+1).' days', strtotime($project['debut'])); //le décalage +1 jour après le projet
+		
+		if($project['meeting']){
+			$after = strtotime('-1 day', $after);
+		}
 		
 		$out.= GanttReaderDrawer::drawPadding($after, $timeB, $vacations);//bourrage après
+		
 		$out.='</tr>';
 
 		return $out;
@@ -313,8 +321,11 @@ class GanttReaderDrawer{
 	 * @see www.w3.org/Graphics/SVG/
 	 */
 	static function drawProject($project, $vacations, $earliest, $lastest){
+		
 		$start = strtotime($project['debut']);
-		$end = strtotime('+'.($project['longueur']-1).' days', $start);
+		$end = strtotime('+'.($project['longueur']).' days', $start);
+		
+		//echo('Projet '.$project['nom'].', fin : '.date('d/m/Y', $end).'<br />');
 		
 		if($project['hasChild']){
 			return ganttReaderDrawer::drawFather($project, $vacations); //Si projet englobant
@@ -336,7 +347,7 @@ class GanttReaderDrawer{
 			$out.= GanttReaderDrawer::drawStar($project['couleur']);			
 			$out.='</td>';
 			
-		} elseif($project['longueur']==1){ //si ne dure qu'un jour
+		} elseif($project['longueur']==0){ //si ne dure qu'un jour
 			  
 			$out.='<div style="background-color:'.$project['couleur'].'" class="ganttProjectEnd ganttProjectStart';
 		
@@ -355,16 +366,18 @@ class GanttReaderDrawer{
 				$out.=' complete';
 			}
 			$out.='"></div></td>';
+			
 			$current = strtotime('+1 day', $current);
 			   
 			   
 		/*Jours du centre*/
-		for(; $actuel<$project['longueur']-2; $actuel++){
+		for(; $actuel<$project['longueur']-1; $actuel++){
 		$out.='<td class="dayBox ';
 		if(GanttReaderDate::inRest($current, $vacations)){
 			$out.=' dayOff';
 		}
-		
+		//echo('dessin de jour : '.date('d/m/Y', $current).'<br />');
+
 		$out.='"><div style="background-color:'.$project['couleur'].'" class="ganttProject';
 		if(GanttReaderDate::completed($project, $actuel)){
 				$out.=' complete';
@@ -379,7 +392,7 @@ class GanttReaderDrawer{
 		if(GanttReaderDate::inRest($current, $vacations)){
 			$out.=' dayOff';
 		}
-			  
+			  //echo('dessin du dernier jour : '.date('d/m/Y', $current).'<br />');
 		$out.='"><div style="background-color:'.$project['couleur'].';" class="ganttProjectEnd';
 		if(GanttReaderDate::completed($project, $actuel)){
 			$out.=' complete';
@@ -459,7 +472,7 @@ class GanttReaderDrawer{
 		
 		/*jours du centre*/
 		
-		for(; $actuel<$project['longueur']-1; $actuel++){
+		for(; $actuel<$project['longueur']; $actuel++){
 			$out.='<td class="dayBox ';
 			if(GanttReaderDate::inRest($current, $vacations)){
 				$out.=' dayOff';

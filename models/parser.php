@@ -3,70 +3,87 @@
 
 /************************************************************************************
  * Utilitaire de récupération des informations contenues dans le fichier GanttProject
+ * Récupération des éléments suivants :
+ *	Projets contenus dans le fichier
+ *		Propriétés de ces projets
+ *	Contraintes de suite entre différents projets
+ *	Plages de congés
  ************************************************************************************/
 class GanttReaderParser{
 	
 	/**
-	 * @params SimpleXMLElement $gan l'instance du parseur (contient déjà les infos) et la couleur par défaut des projets $defaultColor
+	 * @param (SimpleXMLElement) $gan l'instance du parseur (l'objet contient les informations qui étaient contenues dans le fichier GanttProject)
+	 * @param (array) $vacations le tableau des plages de congés
+	 * @param (String) $defaultColor la couleur par défaut des projets
+	 * @params (timestamp) $earliest et $lastest les dates des dates au plus tôt et au plus tard de la vue 
 	 * @return un array() le tableau des projets organisées selon clé => valeur
-	 * chaque projet se présente en tableau associatif contenant chacune les informations extraites
+	 $ @see http://php.net/manual/fr/book.simplexml.php
 	 */
 	static function getProjects(&$gan, &$vacations, $defaultColor, $earliest, $lastest){
-		$projects = NULL;	//valeur par défaut, évite les diagrammes vides
+
+		$projects = NULL;	//valeur par défaut, protège des diagrammes vides
 		
 		if(isset($gan->tasks)){
 			foreach($gan->tasks->task as $task){
 				GanttReaderParser::getProjectProperties($task, $gan, $defaultColor, $projects, $vacations, $earliest, $lastest);
 			}
 		}
-
+		
 		return $projects;
 	}
 	
 	/**
-	 * @param $task la tâche à insérer
-	 * @param $gan l'instance du parseur XML
-	 * @param $defaultColor, la couleur par défaut des projets
-	 * @param $projects le tableau des projets à compléter avec l'ajout du projet actuel
-	 * How : Concatène les données du projet courant au tableau des projets, puis fais de même récursivement avec hacun de ses projets fils
+	 * @param (SimpleXMLElement) $task la tâche à insérer
+	 * @param (SimpleXMLElement) $gan l'instance du parseur XML
+	 * @param (String) $defaultColor, la couleur par défaut du projet
+	 * @param (array) $projects le tableau des projets à compléter avec l'ajout du projet actuel
+	 * How : Ajoute les données du projet courant au tableau des projets, puis fais de même récursivement avec chacun de ses projets fils s'il en a
 	 */
 	 static function getProjectProperties($task, &$gan, $defaultColor,&$projects, &$vacations, $earliest, $lastest){
 		 
 		 		$id = $task->attributes()->id->__toString();
 				$nom = $task->attributes()->name->__toString();
-				$duree = $task->attributes()->duration->__toString(); //durée selon GanttProject, ie le nombre de jours ouvrés
 
 				$couleur = isset($task->attributes()->color) ? /*si couleur non précisée, prendre celle par défaut*/
 					$task->attributes()->color->__toString() : 
 					$defaultColor; 
 					
 				$debut = $task->attributes()->start->__toString();
+				$duree = $task->attributes()->duration->__toString(); //durée selon GanttProject, ie le nombre de jours ouvrés
+				$meeting = $task->attributes()->meeting->__toString()==='true';
+
 				$longueur = GanttReaderDate::projectLength($debut, $duree, $vacations); //taille (en jours) du projet
 
-				if(strtotime($debut)<$earliest){
-					$longueur = $longueur - GanttReaderDate::gap(strtotime($debut), $earliest); //enlever le surplus
-					$debut = date('Y-m-d', $earliest);
+				$fin = strtotime('+'.($longueur).' days', strtotime($debut));
+				
+				
+				
 
+				/* On tronque les projets qui ne rentrent pas en entier */
+				
+				if(strtotime($debut)<$earliest && $fin>$earliest){ // Si commence trop tôt
+
+					$longueur = GanttReaderDate::gap($fin, $earliest); //enlever le surplus
+					
+					$debut = date('Y-m-d', $earliest); //placer le commencement au début de la vue
 					
 				}
 				
-				if(strtotime('+'.$longueur.' days', strtotime($debut))>$lastest){
-					$longueur = GanttReaderDate::gap(strtotime($debut), $lastest)+1;
+				if($fin>$lastest && strtotime($debut)<$lastest){//si finis trop tard
+					$longueur = GanttReaderDate::gap(strtotime($debut), $lastest);
 				}
 				
+				//echo($nom.' '.date('d/m/Y', strtotime($debut)).' -> '.date('d/m/Y', strtotime('+'.($longueur).' days', strtotime($debut))).'<br />');
+				//echo $nom.' -> '.$longueur.'<br />';
 				
-				
-				$meeting = $task->attributes()->meeting->__toString()==='true';
 				$avancement = $task->attributes()->complete->__toString();
 				$hasChild = isset($task->task);
 			
-				
 				$projects[] = array(
 								'id' => $id,
 								'nom' => $nom,
 								'couleur' => $couleur,
 								'debut' => $debut,
-								'duree' => $duree,
 								'longueur' => $longueur,
 								'avancement' => $avancement,
 								'meeting' =>$meeting,
