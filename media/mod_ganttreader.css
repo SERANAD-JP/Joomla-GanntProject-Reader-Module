@@ -22,7 +22,7 @@
 	opacity: .9;
 }
 
-.ganttFatherProject{
+.ganttFatherProject{ /* Projets pères */
     position:relative;
     top:-13px;
 	height:10px;
@@ -30,11 +30,11 @@
     margin-right:-1px;
 }
 
-.ganttProject{
+.ganttProject{ /* Cases centrales d'un projet classique */
     margin-right:-1px;
 }
 
-.ganttProjectStart{
+.ganttProjectStart{ /* Première case d'un projet classique */
 	float:right;
 	width:100%;
 	border-left: 1px solid black;
@@ -44,7 +44,7 @@
 	padding-right:1px;
 }
 
-.ganttProjectEnd{
+.ganttProjectEnd{ /* Dernière case d'un projet classique */
 	width:85%;
 	border-right:1px solid black;
 	border-top-right-radius:3px;;
@@ -53,10 +53,19 @@
     margin-right:2px;
 }
 
-.ganttEmbed{ /*Titre*/
+.ganttEmbed{ /*Titre et numéro du jour*/
     text-transform:uppercase;
     font-weight:bold;
     
+}
+
+#ganttTitle{ /* Titre du diagramme */
+    position:absolute;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:200px;
+    height:72px;
 }
 
 
@@ -91,7 +100,7 @@ path{ /* Trait de flèche */
 }
 
 
-#ganttHeader{ /*Mois et jours*/
+#ganttHeader{ /*Mois et jours (en haut)*/
 	position:relative;
 	left:200px;
     width:480px;
@@ -127,11 +136,3 @@ path{ /* Trait de flèche */
     
 }
 
-#ganttTitle{ /* Titre du diagramme */
-    position:absolute;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    width:200px;
-    height:72px;
-}

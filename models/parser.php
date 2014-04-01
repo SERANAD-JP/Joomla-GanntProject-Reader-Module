@@ -1,35 +1,37 @@
-
 <?php
+
+defined('_JEXEC') or die('Restricted access');
 
 /************************************************************************************
  * Utilitaire de récupération des informations contenues dans le fichier GanttProject
  * Récupération des éléments suivants :
  *	Projets contenus dans le fichier
- *		Propriétés de ces projets
+ *	 --> Propriétés de ces projets
  *	Contraintes de suite entre différents projets
  *	Plages de congés
  ************************************************************************************/
 class GanttReaderParser{
 	
 	/**
+	 * Renvoie la liste des projets du fichier GanttProject
 	 * @param (SimpleXMLElement) $gan l'instance du parseur (l'objet contient les informations qui étaient contenues dans le fichier GanttProject)
-	 * @param (array) $vacations le tableau des plages de congés
+	 * @param (array) $vacances le tableau des plages de congés
 	 * @param (String) $defaultColor la couleur par défaut des projets
 	 * @params (timestamp) $earliest et $lastest les dates des dates au plus tôt et au plus tard de la vue 
-	 * @return un array() le tableau des projets organisées selon clé => valeur
+	 * @return (array) le tableau des projets organisées selon clé => valeur
 	 $ @see http://php.net/manual/fr/book.simplexml.php
 	 */
-	static function getProjects(&$gan, &$vacations, $defaultColor, $earliest, $lastest){
+	static function getProjects(&$gan, &$vacances, $defaultColor, $earliest, $lastest){
 
-		$projects = NULL;	//valeur par défaut, protège des diagrammes vides
+		$projets = NULL;	//valeur par défaut, protège des diagrammes vides
 		
 		if(isset($gan->tasks)){
-			foreach($gan->tasks->task as $task){
-				GanttReaderParser::getProjectProperties($task, $gan, $defaultColor, $projects, $vacations, $earliest, $lastest);
+			foreach($gan->tasks->task as $tache){
+				GanttReaderParser::getProjectProperties($tache, $gan, $defaultColor, $projets, $vacances, $earliest, $lastest);
 			}
 		}
 		
-		return $projects;
+		return $projets;
 	}
 	
 	/**
@@ -39,20 +41,20 @@ class GanttReaderParser{
 	 * @param (array) $projects le tableau des projets à compléter avec l'ajout du projet actuel
 	 * How : Ajoute les données du projet courant au tableau des projets, puis fais de même récursivement avec chacun de ses projets fils s'il en a
 	 */
-	 static function getProjectProperties($task, &$gan, $defaultColor,&$projects, &$vacations, $earliest, $lastest){
+	 static function getProjectProperties($tache, &$gan, $defaultColor,&$projets, &$vacances, $earliest, $lastest){
 		 
-		 		$id = $task->attributes()->id->__toString();
-				$nom = $task->attributes()->name->__toString();
+		 		$id = $tache->attributes()->id->__toString();
+				$nom = $tache->attributes()->name->__toString();
 
-				$couleur = isset($task->attributes()->color) ? /*si couleur non précisée, prendre celle par défaut*/
-					$task->attributes()->color->__toString() : 
+				$couleur = isset($tache->attributes()->color) ? /*si couleur non précisée, prendre celle par défaut*/
+					$tache->attributes()->color->__toString() : 
 					$defaultColor; 
 					
-				$debut = $task->attributes()->start->__toString();
-				$duree = $task->attributes()->duration->__toString(); //durée selon GanttProject, ie le nombre de jours ouvrés
-				$meeting = $task->attributes()->meeting->__toString()==='true';
+				$debut = $tache->attributes()->start->__toString();
+				$duree = $tache->attributes()->duration->__toString(); //durée selon GanttProject, ie le nombre de jours ouvrés
+				$meeting = $tache->attributes()->meeting->__toString()==='true';
 
-				$longueur = GanttReaderDate::projectLength($debut, $duree, $vacations); //taille (en jours) du projet
+				$longueur = GanttReaderDate::projectLength($debut, $duree, $vacances); //taille (en jours) du projet
 
 				$fin = strtotime('+'.($longueur).' days', strtotime($debut));
 				
@@ -73,13 +75,10 @@ class GanttReaderParser{
 					$longueur = GanttReaderDate::gap(strtotime($debut), $lastest);
 				}
 				
-				//echo($nom.' '.date('d/m/Y', strtotime($debut)).' -> '.date('d/m/Y', strtotime('+'.($longueur).' days', strtotime($debut))).'<br />');
-				//echo $nom.' -> '.$longueur.'<br />';
-				
-				$avancement = $task->attributes()->complete->__toString();
-				$hasChild = isset($task->task);
+				$avancement = $tache->attributes()->complete->__toString();
+				$hasChild = isset($tache->task);
 			
-				$projects[] = array(
+				$projets[] = array(
 								'id' => $id,
 								'nom' => $nom,
 								'couleur' => $couleur,
@@ -91,59 +90,61 @@ class GanttReaderParser{
 								);
 								
 						
-				if(isset($task->task)){ //s'il existe une sous-tâche de cette tâche
-					foreach($task->task as $subTask){
-						GanttReaderParser::getProjectProperties($subTask, $gan, $defaultColor, $projects, $vacations, $earliest, $lastest);
+				if(isset($tache->task)){ //s'il existe une sous-tâche de cette tâche
+					foreach($tache->task as $sousTache){
+						GanttReaderParser::getProjectProperties($sousTache, $gan, $defaultColor, $projets, $vacances, $earliest, $lastest);
 					}
 				}
 				
 	 }
 	
-	/*
-	 * @param SimpleXMLElement $gan l'instance du parseur du diagramme de gantt et la liste des $projects extraits
+	/**
+	 * @param (SimpleXMLElement) $gan l'instance du parseur du diagramme de gantt et la liste des $projects extraits
 	 * @return le tableau des $constraints selon 
 	 * 		['from']=> provenance de la contrainte
 	 *		['to']=> projet cible de la contrainte
 	 * How : Dans un tableau $indexes[] on associe l'id d'un projet avec son ordre d'apparition dans le parser
 	 */
-	static function getConstraints(&$gan, &$projects){
+	static function getConstraints(&$gan, &$projets){
 		
-		$constraints=NULL; //null par défaut, contre l'absence de contraintes
+		$contraintes=NULL; //null par défaut, contre l'absence de contraintes
 	
-		if(!isset($projects)){ //protection VS absence de projets
+		if(!isset($projets)){ //protection VS absence de projets
 			return NULL;
 		}
 		
 		$i=0; //Index d'apparition
 		
-		foreach($projects as $project){ //établir le lien id => index pour chaque projet
-			$indexes[$project['id']] = $i++;	
+		foreach($projets as $projet){ //établir le lien id => index pour chaque projet
+			$indexes[$projet['id']] = $i++;	
 		}
 		
 		
-		foreach($gan->tasks->task as $task){
+		foreach($gan->tasks->task as $tache){
 			
-			GanttReaderParser::getConstraintProperties($task, $gan, $projects, $constraints, $indexes);
+			GanttReaderParser::getConstraintProperties($tache, $gan, $projets, $contraintes, $indexes);
 		}
 		
-		return $constraints;
+		return $contraintes;
 	}
 	
 	
 	/**
-	 *
+	 * @params (SimpleXMLElement) $tache, $gan les instances du parseur du projet à étudier
 	 */
-	static function getConstraintProperties(&$task, &$gan, &$projects, &$constraints, &$indexes){
-		if(isset($task->task)){
-				foreach($task->task as $subTask){
-					GanttReaderParser::getConstraintProperties($subTask, $gan, $projects, $constraints, $indexes);
+	static function getConstraintProperties(&$tache, &$gan, &$projets, &$contraintes, &$indexes){
+		if(isset($tache->task)){
+				foreach($tache->task as $sousTache){
+					GanttReaderParser::getConstraintProperties($sousTache, $gan, $projets, $contraintes, $indexes);
 				}
 			}
 			
-			foreach($task->depend as $dep){ //récupérer les contraintes (dépendances) avec les id	
-				if(isset($indexes[$task->attributes()->id->__toString()], $indexes[$dep->attributes()->id->__toString()])) //seulement si la source de la contrainte s'affiche dans le diagramme
-				$constraints[]= array(	
-										'from' => $indexes[$task->attributes()->id->__toString()],
+			foreach($tache->depend as $dep){ //récupérer les contraintes (dépendances) avec les id
+			
+				//seulement si la source et la cible de la contrainte s'affichent dans le diagramme
+				if(isset($indexes[$tache->attributes()->id->__toString()], $indexes[$dep->attributes()->id->__toString()])) 
+				$contraintes[]= array(	
+										'from' => $indexes[$tache->attributes()->id->__toString()],
 										'to' => $indexes[$dep->attributes()->id->__toString()]
 										);
 			}
@@ -151,25 +152,26 @@ class GanttReaderParser{
 	
 	
 	/*
-	 * @param SimpleXMLElement $gan l'instance du parseur
-	 * @return array() les plages de congés avec dates de début et de fin
+	 * Renvoie la liste des plages de congés
+	 * @param (SimpleXMLElement) $gan l'instance du parseur
+	 * @return (array) les plages de congés avec dates de début et de fin
 	 */
 	static function getVacations(&$gan){
 		
-		$vacations=NULL;//null par défaut, contre l'absence de congés
+		$vacances=NULL;//null par défaut, contre l'absence de congés
 		
 		if(isset($gan->vacations->vacation))
 		
-			foreach ($gan->vacations->vacation as $vacation){
-				$start = $vacation->attributes()->start->__toString();
-				$end = $vacation->attributes()->end->__toString();
-				$vacations[] = array(
+			foreach ($gan->vacations->vacation as $plage){
+				$start = $plage->attributes()->start->__toString();
+				$end = $plage->attributes()->end->__toString();
+				$vacances[] = array(
 									'start' => $start,
 									'end' => $end
 									);
 			}
 			
-		return $vacations;
+		return $vacances;
 	}
 }
 

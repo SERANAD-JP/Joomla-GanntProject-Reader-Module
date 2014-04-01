@@ -1,12 +1,13 @@
 <?php
 
+defined('_JEXEC') or die('Restricted access');
+
 /*******************************************************************************************************************************
  * Utilitaire de récupération des données
  * Le helper est chargé de retrouver les paramètres fournis dans le backend, d'extraire les données via le parseur et chercher des erreurs
  *******************************************************************************************************************************/
 
 $errors = ''; //On initialise les erreurs à (éventuellement) afficher plus tard
-
 
 /*  Récupération des paramètres back-end  */
 
@@ -66,10 +67,9 @@ if (!preg_match_all ("/".$colorPattern."/is", $todayColor, $matches))
 }
 /* Fin de vérification des couleurs */
 
-
-switch(JFactory::getLanguage()->getName()){ //afficher le titre dans quelle langue ? (anglais = par défaut)
+switch(JFactory::getLanguage()->getTag()){ //afficher le titre dans quelle langue ? (anglais = par défaut)
 /* strucuture en switch pour implémentation facile  de langages supplémentaires */
-	case 'French (fr-FR)':
+	case 'fr-FR':
 		$title = $params->get('frenchTitle');
 	break;
 	

@@ -1,5 +1,7 @@
-
 <?php
+
+defined('_JEXEC') or die('Restricted access');
+
 /********************************************************************************
  * Modèle de gestion des dates
  * Fournis les méthodes relatives au calendrier, aux dates et au calcul de durée
@@ -239,6 +241,10 @@ class GanttReaderDate{
 	 */
 	 static function projectLength($debut, $duree, $vacations){
 		 
+		 if($duree==0){ // Un meeting ou un projet ne dure rien selon GanttProject, corriger en renvoyant 1
+			return 1;
+		}
+		 
 		$current = strtotime($debut); //placer un repère sur le jour de début
 		
 		$conges = 0; //compter le nombre de jours vaqués
@@ -246,9 +252,7 @@ class GanttReaderDate{
 		$ouvres = $duree; //nombre de jours ouvrés à parcourir
 		
 		
-		if($duree==0){ // Un meeting ou un projet ne dure rien selon GanttProject, corriger en renvoyant 1
-			return 1;
-		}
+		
 		 
 		 
 		 do{
