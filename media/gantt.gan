@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="SERANAD" company="Service d'Analyse des Données" webLink="http://" view-date="2014-01-13" view-index="0" gantt-divider-location="676" resource-divider-location="515" version="2.0" locale="fr">
-    <description><![CDATA[Ce projet regroupe toutes les activités de SERANAD. Il comporte le diagramme de gantt et les resssources impliqué dans les différentes taches à acomplir.]]></description>
-    <view zooming-state="default:7" id="gantt-chart">
-        <field id="tpd3" name="Nom" width="58" order="0"/>
-        <field id="tpd4" name="Date de début" width="16" order="1"/>
-        <field id="tpd5" name="Date de fin" width="24" order="2"/>
+<?xml version="1.0" encoding="UTF-8"?><project name="" company="" webLink="" view-date="2013-12-09" view-index="0" gantt-divider-location="369" resource-divider-location="322" version="2.0" locale="fr">
+    <description/>
+    <view zooming-state="default:5" id="gantt-chart">
+        <field id="tpd3" name="Nom" width="33" order="0"/>
+        <field id="tpd4" name="Date de début" width="33" order="1"/>
+        <field id="tpd5" name="Date de fin" width="33" order="2"/>
     </view>
     <view id="resource-table">
         <field id="0" name="Nom" width="50" order="0"/>
-        <field id="1" name="Rôle par défaut" width="49" order="1"/>
+        <field id="1" name="Rôle par défaut" width="50" order="1"/>
     </view>
     <!-- -->
     <calendars>
@@ -21,30 +21,7 @@
                 <days/>
             </calendar>
         </day-types>
-        <date year="1" month="1" date="1"/>
-        <date year="2012" month="1" date="2"/>
-        <date year="2012" month="4" date="9"/>
-        <date year="1" month="5" date="1"/>
-        <date year="1" month="5" date="8"/>
-        <date year="2012" month="5" date="17"/>
-        <date year="2012" month="5" date="28"/>
-        <date year="1" month="7" date="14"/>
-        <date year="1" month="8" date="15"/>
-        <date year="1" month="11" date="1"/>
-        <date year="1" month="11" date="11"/>
-        <date year="2012" month="11" date="12"/>
-        <date year="1" month="12" date="25"/>
-        <date year="2005" month="3" date="28"/>
-        <date year="2013" month="12" date="2"/>
-        <date year="2013" month="12" date="3"/>
-        <date year="" month="1" date="1"/>
-        <date year="" month="5" date="1"/>
-        <date year="" month="5" date="8"/>
-        <date year="" month="7" date="14"/>
-        <date year="" month="8" date="15"/>
-        <date year="" month="11" date="1"/>
-        <date year="" month="11" date="11"/>
-        <date year="" month="12" date="25"/>
+        <date year="2006" month="2" date="14"/>
     </calendars>
     <tasks empty-milestones="true">
         <taskproperties>
@@ -59,341 +36,104 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="0" name="Archv001" color="#ffcccc" meeting="false" start="2013-07-01" duration="218" complete="80" expand="true">
-            <notes><![CDATA[Le site intranet de SERANAD a été demandé par Marc P. lors de l'entretient d'activité de Juin 2013. Il doit être une concrétisation du service et doit représenter un outil pour l'institut.
-
-Ce site doit comporter des liens vers les outils bioinformatiques développé en externe. Il doit permettre de trouver la base de données et/ou le programme nécessaire à l'analyse des données classiques de biologie.
-Ce site doit comporter les documents bibliographique sur les outils statistiques utiles pour réaliser les analyses des expériences de biologie.
-Enfin il peut comporter des outils (programmé en java script) ou des liens vers les outils bioinformatiques développé par SERANAD.]]></notes>
-            <depend id="3" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="3" name="Archv002" color="#ffcccc" meeting="false" start="2014-05-14" duration="213" complete="0" thirdDate="2013-07-31" thirdDate-constraint="1" expand="true">
-            <notes><![CDATA[Faire le tour des équipes pour recenser les logiciels achetés par le laboratoire, par les équipes, les licences disponibles, les personnels experts.]]></notes>
-        </task>
-        <task id="7" name="Archv003" color="#999999" meeting="false" start="2013-07-10" duration="15" complete="100" expand="true">
-            <notes><![CDATA[Mise au point et test de la version 2 de la base de données de gestion des personnelles de l'IGMM. Cette base a été développé en Access et retera dans ce langage. Elle doit comporter une reunion pour définir le cahier des charges, ainsi qu'un reunion pour prévoir le développement et les miles stones. Enfin, les miles stone seront là pour vérifier la qualité des dévelopement effectués. On doit enfin garder 5 jours de tests.]]></notes>
-        </task>
-        <task id="12" name="Archv004" color="#999999" meeting="false" start="2013-09-17" duration="193" complete="60" expand="true">
-            <notes><![CDATA[Modification du coeur d'IDeFIx pour qu'il puisse prendre en compte des fibres courbes (besoin de biblio sur les splines et plus particulièrement sur les béziers)
-Modificiation si le temps le permet des méthodes de thread pour augmenter les capacité de calcul et de gestion de la mémoire.]]></notes>
-        </task>
-        <task id="19" name="Archv005" color="#999999" meeting="false" start="2014-07-15" duration="40" complete="10" priority="0" expand="true">
-            <notes><![CDATA[Mise en place de test de controle de la platine motorisée par IDeFIx sur les microscopes du MRI. Développement en fonction des résultats.]]></notes>
-        </task>
-        <task id="22" name="Archv006" color="#0000cc" meeting="false" start="2013-07-29" duration="215" complete="80" expand="true">
-            <notes><![CDATA[Mise en place de la formation statistique sur les méthodes descriptives et inférentielles. Il faut une formation sur projet ou l'on utilise R pour répondre aux excercices par des simulations.
-La partie théorique est données sous forme de fascicule.]]></notes>
-        </task>
-        <task id="24" name="Archv007" color="#999999" meeting="false" start="2013-12-16" duration="10" complete="90" expand="true">
-            <notes><![CDATA[Développement et Mise en place d'une microapplication capable d'aider les biologistes a prendre une décision sur le nombre de mesure a éffectuer en fonction du type de mesure et des connaissances apriori sur les populations (moyenne et écart type et estimation de l'importance de l'effet.)]]></notes>
-        </task>
-        <task id="26" name="Archv008" color="#ffcccc" meeting="false" start="2014-05-02" duration="10" complete="10" expand="true">
-            <notes><![CDATA[Finaliser un protocole d'anlayse pour le séquencage. Notamment dans un traitement classique des données. Puis faire un sondage dans l'institut pour connaître les besoins dans ce domaine pour la création de protocoles d'analyses particuliers]]></notes>
-        </task>
-        <task id="27" name="Archv009" color="#ffcccc" meeting="false" start="2014-02-10" duration="108" complete="50" expand="true">
-            <notes><![CDATA[Rédiger les protocoles d'anlayses utilisées par la plateforme :
-Protocole de tests statistiques t-test et/ou wilcox, et/ou chisquare et/ou kolmogornov
-Protocole d'analyse des puces à ADN (avec les différentes puces prises en compte)
-Protocole d'analyse de l'utilisation de BLAST]]></notes>
-        </task>
-        <task id="28" name="Archv010" color="#ffcccc" meeting="false" start="2014-02-03" duration="200" complete="50" priority="0" expand="true">
-            <notes><![CDATA[Initiation à Unity pour réaliser des structures en 3D type architecture. Possibilité de compiler pour télépone et/ou site web.
-]]></notes>
-        </task>
-        <task id="32" name="Archv011" color="#00ff00" meeting="false" start="2014-01-20" duration="10" complete="70" expand="true">
-            <notes><![CDATA[Prjoet initié par C.Sardet (avec Genevieve Rodiez en interlocuteur principal)
-Il consiste a trouver la fréquence d'apparition d'une liste d'au moins  5 gènes (élargie à 7 dans un deuxième temps) dans les bases de données qui contiennent les données de puces/seq publiées.
-
-Donnees sauvegardées Z:\Analyses Donnees\MetaAnalyse\Analyses\CSL001
-
-Les gènes sont issus de seq sur HumanGenome
-
-HG	Entrez Gene ID
----------------------------------------------
-MPC1	51660
-DLAT	1737
-DLD	1738
-PDPR	55066
-SLC25A19	60386
-
-Ils sont classés par ordre d'intéret
-
-Les deux gènes ajoutés sont
-E4F1 qui est potentiellement  le responsable de l'expression des 5 gènes
-et Hax1 qui semble avoir un effet également (comme les 5 trouvés)
-
-HG	Entrez Gene ID
----------------------------------------------
-Hax1	10456
-E4F1	1877
-
-Discussion avec C.Sardet sur l'utilisation d'un soft nommée "Mart-Q ?"
-
-trouvé sur http://www.broadinstitute.org/cancer/software/genepattern/desc/expression
-
--Pathway analysis is the search for sets of genes differentially expressed in distinct phenotypes. GenePattern provides the following support for pathway analysis:
-
-KSscore computes a Kolmogorov-Smirnov non-parametric rank statistic representing the positional distribution of a set of genes within an ordered list of genes. You can use this analysis to examine the enrichment of a set of genes at the top of an ordered list; the KSscore is high when the genes in the gene set appear near the top of the ordered list.
-Gene Set Enrichment Analysis (GSEA) determines whether an a priori defined set of genes shows statistically significant, concordant differences between two biological states (e.g. phenotypes). The GSEA software packages the method, making it easy to run the analysis and review the results.
-In addition, GenePattern provides tools for retrieving annotations that aid in understanding gene sets and gene set enrichment results.
-
-
-Arpès étude sur GeneGo, il semblerait qu'un pathway puisse être envisagé : pyruvate synthèse qui se déroule dans la mitho? A discuter avec C.Sarder et/ou G.Rodiez pour savoir si on cherche plus longement. (Pas de résultat sur le smart-Q !)]]></notes>
-        </task>
-        <task id="35" name="Archv012" color="#8cb6ce" meeting="false" start="2014-01-17" duration="55" complete="80" expand="true">
-            <notes><![CDATA[Projet initié par E.Bertrand 
-
-Données sauvegardées dans le répertoire : 
-Z:\Developpement Informatique\LogicielAFacon\EBL001
-
-Il est dans le contexte du suivie d'expression par introduction de sondes FISH fluorescente (pour du suivit intracellulaire). Quand les sondes marques du miRNA ils permettent de suivre l'expression (avec notamment le nombre de brin situé au même endroit)
-
-Afin de réduire les cout de marquage et de création de sondes il désire un logiciel capable de designer des sondes oligonucléotidiques spécifique à une séquence donnée
-
-Pour la séquence désirée (de environ 2000 bases) on souhaite pouvoir brancher au maximum 50 sondes de 40 bases (ceci sans tenir compte de l'espacement entre les sondes) Le besoin n'est pas de chercher a optimiser le nombre de sondes présente sur la séquence (pour le moment) mais dans un premier temps de trouver les sondes qui auront le même Tm (environ) et qui puissent se trouver en nombre dans la séquence
-
-On peut utiliser le même genre de calcul de Tm des logiciels existant : 
-http://www.basic.northwestern.edu/biotools/oligocalc.html
-
-Le source de ce logiciel est disponible. Il est écrit en javascript et peut servir de base à l'interrogation multiple.
-
-
-]]></notes>
-            <task id="58" name="Archv012_1" color="#999999" meeting="false" start="2014-01-31" duration="10" complete="80" expand="true">
-                <notes><![CDATA[Développer le code en java pour étendre la recherche d'une séquence interressante a plusieurs séquence qui ont un Tm relativement proche (compris dans le même intervalle) Le code dans un premier temps ne cherchera pas à trouver la meilleur combinaison (le plus de sondes sur la séquence proposée) mais uniquement une combinaison qui fonctionne.
-
-Post reunion du 10/02/2014 le logiciel OligoWizz du CBS (Dk) semble convenir pour le design. Il a été décidé, qu'après une petite periode de tests (qui nécéssitera peut être la création d'un test post pour les repeat maskers) un serveur local d'OligoWizz sera mis en place et le batch des commandes sera automatisé. (cf le retour de test de EBL)]]></notes>
-                <depend id="102" type="2" difference="10" hardness="Strong"/>
+        <task id="0" name="Architectural design" color="#99ccff" meeting="false" start="2013-12-23" duration="25" complete="81" expand="true">
+            <task id="9" name="Create draft of architecture" color="#99ccff" meeting="false" start="2013-12-23" duration="10" complete="100" expand="true">
+                <depend id="10" type="2" difference="0" hardness="Strong"/>
+                <depend id="12" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="59" name="Archv012_2" color="#999999" meeting="false" start="2014-01-17" duration="10" complete="95" expand="true">
-                <notes><![CDATA[Chercher les applications et / ou logiciel en ligne dont le code source serait disponible capable de :
-- calculer le Tm d'une séquence donnée
-- connaitre le potentielle de self repliement
-- connaitre la spécificité dans le génome de la séquence proposée.
-
-
-Regarder comment choisir des séquences spécifiques dans oligowizz pour ses tests cross-hybridation.]]></notes>
-                <depend id="58" type="2" difference="0" hardness="Strong"/>
+            <task id="10" name="Prepare construction documents" color="#ff6600" meeting="false" start="2014-01-06" duration="15" complete="75" expand="true">
+                <depend id="17" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="102" name="23_24_03_14_01" color="#999999" meeting="false" start="2014-02-28" duration="25" complete="75" expand="true">
-                <notes><![CDATA[Modification de la base de donnée de OligoWizz pour ajouter les ncRNA utilisée dans le laboratoire. 
-	Si on peut le faire sois même 
-	Sinon envoyer un mail de demande d'ajout au CBS (dk) pour essayer de rajouter cette liste dans les possibilités de leur serveur.
-
-Les séquences en format fasta des ncRNA ont été recu par mail le 24/03/14]]></notes>
+            <task id="17" name="Agreement on architectural plan " color="#00ffcc" meeting="true" start="2014-01-27" duration="0" complete="0" expand="true">
+                <depend id="1" type="2" difference="0" hardness="Strong"/>
             </task>
         </task>
-        <task id="37" name="Archv013" color="#8cb6ce" meeting="false" start="2014-02-03" duration="60" complete="57" expand="true">
-            <notes><![CDATA[Développement d'un module Joomla qui permettra de relier les projets Gants de ce logiciel avec le site web intranet de seranad.
-
-Un stagiaire a été choisi pour aider au développement de ce module (PhP, MySQL / html / git)
-
-Le plan de développement (cahier des charges) sera monté avec le stagiaire.
-]]></notes>
-            <task id="66" name="Archv013_1" color="#999999" meeting="false" start="2014-02-03" duration="20" complete="100" expand="true">
-                <notes><![CDATA[
-Semaine 1 ;
-Remise en pratique (PHP ;BDD); Joomla installé sur Serveur local 'v3.2' ; Squelette Joomla (MVC); //Manifest FrontEnd/BackEnd (Par Nomenclature (Controleur template par default Sauf si ecrasé par Template de Joomla) 
-Eclipse avec PhP et eGit (création de GitHub) Pull / Push.
-
-Gant Project (save *.gan export via ftp(mais trop limité) import export sur webdav
-
-Prévision semaine 2 :
-- Monter projet Joomla / multiluinge / 
-- optionnelle : regarder a un projet plugin +  Lecutre Google Style
-
-TODO fin semaine 1 : Patrice WebDav actif ? Réfléchir règle utilisation de Git si développement en pair. réponse plus installé, si on peut éviter c mieux...
-
-Prévision semaine 3 : Parseur XML, mode bilingual, premier test sur XML exporté de GantProject, avec fichier hébergé sur Joomla, les chron sur windows associé a GantProject (avec export sur winscp)
-
-TODO fin semaine 2 :
-- envoyer un gfichier exporté exemple de Gant¨project
-
-Bilan semaine 3 : A priori pas de soucis de langue le module s'affiche dans les deux. Proposition de traduction par fichier de langue avec equivalent hashmap. L'enrobage et traduit automatiquement par une correspondance variable chaine de characteres. Parseur XML extraction des données sans soucis. Méthode de Php développé pour travailler sur les dates (ex chercher les min max dans les dates pour préparer un affichage intelligent). Premier tests Affichages tableau te brute nickel). Proposition affichage http://bastianallgeier.com/gantti/
-
-TODO fin de semaine 3 : Reunion préparatoire et descriptive du projet en début de semaine (lundi après midi) et une reunion d'élaboration vendredi matin du cahier des charges
-
-Prévision semaine 4 : Le cahier des charges rédigé (style point par point, exhaustif sur les besoins avec des détails si nécessaires) Il peut contenir des idées de méthodes de réalisations mais facultatifs. Le nombre et la nature des objets à développer. RoadMap de dév (plannification du dév des objets nécessaires)
-
-TODO fin de semaine 4 : Cahier des charges rédigé propre et validé. Il ne sera pas modifiable. L'estimation du temps et de la roadmap a été entièrement réalisé par Théo (félicitations) La structure du plugin également. La partie développement peut commencer sereinement.
-
-]]></notes>
+        <task id="11" name="Interior design" color="#33cc00" meeting="false" start="2014-01-06" duration="10" complete="33" expand="true">
+            <depend id="6" type="2" difference="0" hardness="Strong"/>
+            <task id="12" name="Pre-design" color="#0066cc" meeting="false" start="2014-01-06" duration="5" complete="100" expand="true">
+                <depend id="13" type="2" difference="0" hardness="Strong"/>
+                <depend id="14" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="73" name="Archv013_2" color="#999999" meeting="false" start="2014-03-03" duration="20" complete="75" expand="true">
-                <notes><![CDATA[Semaine 1 :
-Environ 50% du développement a été réalisé. Liste des éléments présentés par Théo :
-	Un backend qui contient une strucutre d'affichage 'mode debug" avec un tableau gantt
-	Des projets dans le tableau qui tiennent compte des jours fériers et des week end
-	Des filtres d'affichages sur les projets (pour éliminer ceux dont la date n'est pas dans l'interval choisit (dans la partie backend))
-	le respect des couleurs et l'affichage du nombre de jour dans le titre du projet
-	les tests presques unitaires sur les fonctions écrites.
-
-Demande : passer 3 heures pour réévaluer la roadmap estimer le prévisionnel et envisager un projet supp si le temps et le besoin le permette.
-
-Semaine 2 :
-Avancées notables, le module est quasiment en place, il ne manque que quelques détails de finitions
-
-Semaine 3 : 
-Quasiment fini, il ne manque plus que quelques détails de protections, le look 'n feel est quasiment parfait.
-
-Prévision semaine 4 : ajouter quelques paramètres (chemin du fichier gant dynamique sécurité sur les paramètres, ...) Dépot sur le joomla intranet, avec ouverture a tous du site SERANAD]]></notes>
-                <depend id="96" type="2" difference="0" hardness="Strong"/>
+            <task id="13" name="Furniture selection" color="#ffff33" meeting="false" start="2014-01-13" duration="5" complete="0" expand="true"/>
+            <task id="14" name="Equipment planning" color="#99ccff" meeting="false" start="2014-01-13" duration="5" complete="0" expand="true">
+                <notes><![CDATA[Embedded devices, kitchen, washing machine, dryer etc]]></notes>
             </task>
-            <task id="112" name="Archv013_3" color="#8cb6ce" meeting="true" start="2014-03-26" duration="0" complete="0" expand="true"/>
-            <task id="96" name="Archv013_4" color="#999999" meeting="false" start="2014-03-31" duration="20" complete="0" expand="true"/>
         </task>
-        <task id="38" name="Archv014" color="#0000ff" shape="1,0,1,0,0,1,0,1,1,0,1,0,0,1,0,1" meeting="false" start="2014-02-28" duration="10" complete="100" expand="true">
-            <notes><![CDATA[Recommencer les ajustements des décroissances en utilisant des moving averages pour éliminer du bruits des décroissances (taille de fenetre a tester 7 points sur les 14)
-
-Regrouper les décroissances dans les domaines biologiques > 70kB  les ranger par numéro de domaines et utiliser les données moyennées pour réaliser les 4 ajustements caractéristiques des 4 domaines
-
-Tester des moyennes de points normalisés par domaine biologique et ajuster les modèles hélicoidales et/ou linéaires
-
-Début des analyse le 28/02 retardé par le RNAseq de RBL et autres analyses
-]]></notes>
+        <task id="7" name="Construction phase" color="#cc00cc" meeting="false" start="2014-01-27" duration="75" complete="0" expand="true">
+            <depend id="20" type="2" difference="0" hardness="Strong"/>
+            <task id="1" name="Foundation building" color="#009999" meeting="false" start="2014-01-27" duration="15" complete="0" expand="false">
+                <depend id="2" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="2" name="Ground Floor building" color="#66ff00" meeting="false" start="2014-02-17" duration="20" complete="0" expand="false">
+                <depend id="4" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="4" name="First Floor building" color="#99ccff" meeting="false" start="2014-03-17" duration="20" complete="0" expand="false">
+                <depend id="5" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="5" name="Roof" color="#009933" meeting="false" start="2014-04-14" duration="10" complete="0" expand="false">
+                <depend id="18" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="16" name="Connect to communications" color="#ffcc66" meeting="false" start="2014-04-28" duration="10" complete="0" expand="true"/>
+            <task id="18" name="Construction completed " color="#cccccc" meeting="true" start="2014-04-28" duration="0" complete="0" expand="true">
+                <depend id="6" type="2" difference="0" hardness="Strong"/>
+            </task>
         </task>
-        <task id="40" name="Archv015" color="#999999" meeting="false" start="2014-01-28" duration="100" complete="50" expand="true">
-            <notes><![CDATA[Aide au montage d'une grille decalcul sur le nouveaux cluster de l'IGMM. Ce cluster devra permettre aux équipes de l'IGMM et notamment a celle de JC Andrau de calculer des résultats de RNASeq dans de bonnes conditions]]></notes>
+        <task id="8" name="Decoration phase" color="#9999ff" meeting="false" start="2014-04-28" duration="10" complete="0" expand="true">
+            <task id="6" name="Walls" color="#00ffff" meeting="false" start="2014-04-28" duration="5" complete="0" expand="false">
+                <depend id="15" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="15" name="Furniture" color="#99ff99" meeting="false" start="2014-05-05" duration="3" complete="0" expand="true">
+                <depend id="20" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="20" name="Bring your family here" color="#ff9933" meeting="true" start="2014-05-12" duration="0" complete="0" expand="true"/>
         </task>
-        <task id="49" name="Archv016" color="#00ff00" meeting="false" start="2014-01-27" duration="50" complete="80" expand="true">
-            <notes><![CDATA[Les données seq ont été accumulé et peuvent maintenant être traitée.
-La première reunion pour déterminer la meilleur méthode est programmé le lundi 27 Janvier 2014 à 16h. En présence de M.Girardot, de Rémy Bordonne et de Yohanne Soret.
-
-Les données ont été traitées par MATs (résultats arrivés le 25/02/14) discussion avec Johann le 26/02. Mats ne semble pas être l'outil idéal pour analyser les RI. Il se base sur les jonctions et ne semble pas tenir compte des Reads / fragment intronique. 
-
-=> Vérifier la méthode de calcul de RI de Mats
-=> Biblio sur les méthodes de calcul de rétention d'intron en RNASeq
-=> calculer des taux de RI par le rapport (Somme Reads Intron / Somme Reads Exon)KO  /  (Somme Reads Intron / Somme Reads Exon)WT pour tous les introns mineurs U12 et classer par celui qui a le plus de rétention dans le KO...
-
-
-REunion  le 07/03 pour point bilan avancement
-Résultats donnés le 18/03 (Analyse effectuée a l'aide de HTSeq count)
-
-Demande le 20/03/14 meme travail que pour les U12 mais avec les U12/U2
-
-Pbs avec analyses précédentes on reprends les comptages des reads...
-comptage manuel sur un petit pas exprimée, vérification avec Johann et on lance sur tout le monde (visite de johann le 26/03 à 16h)
-]]></notes>
-        </task>
-        <task id="50" name="Archv017" color="#ff0033" meeting="false" start="2014-01-29" duration="3" complete="100" expand="true">
-            <notes><![CDATA[Aide pour la mise en place des outils de traitements des données de ChipSeq sous R.
-
-http://www.bioconductor.org/packages/devel/bioc/html/Repitools.html
-
-]]></notes>
-        </task>
-        <task id="53" name="Archv018" color="#ff3333" meeting="false" start="2014-01-31" duration="11" complete="100" expand="true">
-            <notes><![CDATA[Réaliser les graphiques pour les 4 Barre Codes avec les options 'voir prototype graph et chiffrer la qualité avec les R².
-
-Chercher les critères de qualité d'un MVA plot (R² ? RSS ? normality ?)]]></notes>
-        </task>
-        <task id="97" name="Archv019" color="#00ff00" meeting="false" start="2014-04-01" duration="11" complete="70" expand="true">
-            <notes><![CDATA[Recherche d'une séquence de 30 Nu sur mm9 complet (blast) et vérification nombre et localisation (110 009 000 - 110 014 000 Chr XII )...
-
-Pour sebastien lalevee
-
-
-Envoi d'un mail le 21 pour démarer le travail reunion repoussée au 24 Mars
-
-Séquence issue d'un mail du 4/02/14
-Voilà la séquence de 30 nucléotides à blaster:   tgcctcagtgttgtaggaactggagagaga 
-
-
-Re,
-Je viens de vérifier la séquence que je t'ai donné n'est pas "exactement" bonne. Peux tu tester la séquence suivante de 20 nt à la place de celle de 30 nt stp :
-AGATGCCTCAGTGTTGTAGG
-Merci
-Seb
-
-http://genome-euro.ucsc.edu/c
-
-BLAT Search Results
-
-   ACTIONS      QUERY           SCORE START  END QSIZE IDENTITY CHRO STRAND  START    END      SPAN
----------------------------------------------------------------------------------------------------
-browser details YourSeq           20     1    20    20 100.0%    12   +  111250552 111250571     20
-browser details YourSeq           20     1    20    20 100.0%    12   +  111250458 111250477     20
-browser details YourSeq           20     1    20    20 100.0%    12   +  111250390 111250409     20
-browser details YourSeq           20     1    20    20 100.0%    12   +  111250360 111250379     20
-browser details YourSeq           20     1    20    20 100.0%    12   +  111250326 111250345     20
-browser details YourSeq           20     1    20    20 100.0%    12   +  111250266 111250285     20
-browser details YourSeq           20     1    20    20 100.0%    12   +  111250202 111250221     20
-browser details YourSeq           20     1    20    20 100.0%    12   +  111250172 111250191     20
-browser details YourSeq           20     1    20    20 100.0%    12   +  111250082 111250101     20
-browser details YourSeq           20     1    20    20 100.0%    12   +  111250020 111250039     20
-browser details YourSeq           20     1    20    20 100.0%    12   +  111249956 111249975     20
-browser details YourSeq           20     1    20    20 100.0%    12   +  111249121 111249140     20
-browser details YourSeq           20     1    20    20 100.0%    12   +  111249087 111249106     20
-browser details YourSeq           20     1    20    20 100.0%    12   +  111249053 111249072     20
-browser details YourSeq           20     1    20    20 100.0%    12   +  111248989 111249008     20
-browser details YourSeq           20     1    20    20 100.0%    12   +  111248959 111248978     20
-
-
-mail envoyé avec résultat de blast sur génome mus musculus
-
-
-Trouver une méthode pour chercher les séquences de  Nucléotide Répété entre dans l'intervalle (de l'ordre du 3 million de bp en amont de la séquence repérée précédement) (répété = plus de 25 répétitions)  mismatch 0
-
-----------------Deuxième temps et de moindres importances-------------------
-Les séquences trouvées doivent également ne pas s'aligner en nombre (dans une petite fenetre chromosomique) parfaitement sur d'autres chromosomes]]></notes>
-            <task id="113" name="Archv019_1" color="#8cb6ce" meeting="true" start="2014-04-01" duration="0" complete="0" expand="true"/>
-        </task>
-        <task id="98" name="Archv020" color="#ffffcc" meeting="false" start="2014-06-02" duration="62" complete="100" expand="true">
-            <notes><![CDATA[Projet annulé
-]]></notes>
-        </task>
-        <task id="100" name="Archv021" color="#0000ff" meeting="false" start="2014-03-31" duration="1" complete="0" expand="true">
-            <notes><![CDATA[préparer et/.ou imaginer et projeter une formation R sur technique de  modelisation.]]></notes>
-        </task>
-        <task id="101" name="22_19_03_14_01" color="#00ff00" meeting="false" start="2014-03-19" duration="1" complete="100" expand="true">
-            <notes><![CDATA[Récupérer en ligne sur UniProtKb la liste des proteines de référence de la souris, au moins une colonne GeneID et la colonne Length.
-Récupérer les listes de genes désiré par Eric Fabrizzio
-merger les listes par le geneID en ne conservant que ceux désiré par E.
-Reformater les listes avec les length sous excel
-
-Le repertoire de travail est : SERANAD / ANALYSE / INTERROGATION BDD / UNIPROTKB / ERICFABRIZIO
-
-le Script FromGeneListToProtLength.R
-
-]]></notes>
+        <task id="49" name="Survive the End of the World" color="#ff3333" meeting="true" start="2013-12-23" duration="0" complete="0" expand="true">
+            <depend id="0" type="2" difference="0" hardness="Rubber"/>
         </task>
     </tasks>
     <resources>
-        <resource id="0" name="Thierry GOSTAN" function="1" contacts="" phone=""/>
+        <resource id="1" name="Jack House" function="Default:1" contacts="jack.house@myselfllc.net" phone="0044 077345456"/>
+        <resource id="0" name="John Black" function="4" contacts="john.black@myselfllc.net" phone="+44 0794353567"/>
+        <resource id="2" name="Michelangelo" function="0" contacts="mickelangelo@heaven.net" phone="078 9059056"/>
+        <resource id="3" name="Tom White" function="1" contacts="tom.white@myselfllc.net" phone="07978978978"/>
+        <resource id="4" name="Peter Green" function="1" contacts="peter.green@myselfllc.net" phone="0797897856"/>
+        <resource id="5" name="George Brown" function="1" contacts="george.brown@myselfllc.net" phone="07967766447"/>
+        <resource id="6" name="John Silver" function="2" contacts="john.silver@myselfllc.net" phone="07778967889"/>
     </resources>
     <allocations>
-        <allocation task-id="0" resource-id="0" function="1" responsible="true" load="80.0"/>
-        <allocation task-id="3" resource-id="0" function="1" responsible="true" load="10.0"/>
-        <allocation task-id="7" resource-id="0" function="Default:1" responsible="true" load="10.0"/>
-        <allocation task-id="12" resource-id="0" function="1" responsible="true" load="80.0"/>
-        <allocation task-id="19" resource-id="0" function="1" responsible="true" load="80.0"/>
-        <allocation task-id="24" resource-id="0" function="1" responsible="true" load="90.0"/>
-        <allocation task-id="26" resource-id="0" function="1" responsible="true" load="90.0"/>
-        <allocation task-id="27" resource-id="0" function="1" responsible="true" load="10.0"/>
-        <allocation task-id="22" resource-id="0" function="1" responsible="true" load="80.0"/>
-        <allocation task-id="101" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="100" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="98" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="97" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="53" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="50" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="49" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="40" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="38" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="96" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="73" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="66" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="37" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="102" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="59" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="58" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="35" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="32" resource-id="0" function="1" responsible="true" load="100.0"/>
-        <allocation task-id="28" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="9" resource-id="1" function="Default:1" responsible="false" load="50.0"/>
+        <allocation task-id="12" resource-id="1" function="Default:1" responsible="true" load="100.0"/>
+        <allocation task-id="13" resource-id="1" function="Default:1" responsible="true" load="100.0"/>
+        <allocation task-id="14" resource-id="1" function="Default:1" responsible="true" load="50.0"/>
+        <allocation task-id="15" resource-id="1" function="Default:1" responsible="true" load="100.0"/>
+        <allocation task-id="1" resource-id="0" function="4" responsible="false" load="100.0"/>
+        <allocation task-id="16" resource-id="0" function="4" responsible="true" load="100.0"/>
+        <allocation task-id="9" resource-id="2" function="0" responsible="true" load="100.0"/>
+        <allocation task-id="10" resource-id="2" function="0" responsible="true" load="100.0"/>
+        <allocation task-id="12" resource-id="2" function="0" responsible="false" load="50.0"/>
+        <allocation task-id="14" resource-id="2" function="0" responsible="false" load="50.0"/>
+        <allocation task-id="1" resource-id="3" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="2" resource-id="3" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="4" resource-id="3" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="5" resource-id="3" function="5" responsible="false" load="100.0"/>
+        <allocation task-id="6" resource-id="3" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="15" resource-id="3" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="2" resource-id="4" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="4" resource-id="4" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="16" resource-id="4" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="6" resource-id="4" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="1" resource-id="5" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="2" resource-id="5" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="4" resource-id="5" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="6" resource-id="5" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="1" resource-id="6" function="2" responsible="true" load="100.0"/>
+        <allocation task-id="2" resource-id="6" function="2" responsible="true" load="100.0"/>
+        <allocation task-id="4" resource-id="6" function="2" responsible="true" load="100.0"/>
+        <allocation task-id="5" resource-id="6" function="2" responsible="true" load="100.0"/>
+        <allocation task-id="6" resource-id="6" function="2" responsible="true" load="100.0"/>
     </allocations>
     <vacations>
-        <vacation start="2013-08-05" end="2013-08-26" resourceid="0"/>
-        <vacation start="2014-08-01" end="2014-09-01" resourceid="0"/>
+        <vacation start="2009-02-02" end="2009-02-09" resourceid="1"/>
     </vacations>
     <taskdisplaycolumns>
         <displaycolumn property-id="tpd2" order="-1" width="75" visible="false"/>
@@ -405,14 +145,18 @@ le Script FromGeneListToProtLength.R
         <displaycolumn property-id="tpd9" order="-1" width="75" visible="false"/>
         <displaycolumn property-id="tpd8" order="-1" width="75" visible="false"/>
         <displaycolumn property-id="tpd0" order="-1" width="75" visible="false"/>
-        <displaycolumn property-id="tpd3" order="0" width="396" visible="true"/>
-        <displaycolumn property-id="tpd4" order="1" width="110" visible="true"/>
-        <displaycolumn property-id="tpd5" order="2" width="166" visible="true"/>
+        <displaycolumn property-id="tpd3" order="0" width="122" visible="true"/>
+        <displaycolumn property-id="tpd4" order="1" width="122" visible="true"/>
+        <displaycolumn property-id="tpd5" order="2" width="121" visible="true"/>
     </taskdisplaycolumns>
     <previous/>
     <roles roleset-name="Default"/>
     <roles>
-        <role id="1" name="Responsable du service"/>
-        <role id="2" name="Stagiaire"/>
+        <role id="0" name="Architect"/>
+        <role id="1" name="Bricklayer"/>
+        <role id="2" name="Foreman"/>
+        <role id="3" name="Decorator"/>
+        <role id="4" name="Excavator operator"/>
+        <role id="5" name="Roofer"/>
     </roles>
 </project>
