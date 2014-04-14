@@ -135,7 +135,7 @@ $styles = 	'
 			}
 			
 			';		
-	$document->addStyleDeclaration($styles);	
+	JFactory::getDocument()->addStyleDeclaration($styles);	
 }
 
 

@@ -1,7 +1,7 @@
 @charset "utf-8";
 /* CSS Document */
 
-#ganttDiagram{ /* Conteneur principal */
+#ganttDiagram{ /* Main container */
 	position:relative;
 	float:left;
 	height:300px;
@@ -9,7 +9,7 @@
 	overflow:auto;
 }
 
-.ganttProject, .ganttProjectStart, .ganttProjectEnd{ /* Barres de projets */
+.ganttProject, .ganttProjectStart, .ganttProjectEnd{ /* Projects bars */
 	width:auto;
 	height:85%;
     z-index:1;
@@ -22,7 +22,7 @@
 	opacity: .9;
 }
 
-.ganttFatherProject{ /* Projets pères */
+.ganttFatherProject{ /* Surrounding projects : father projects*/
     position:relative;
     top:-13px;
 	height:10px;
@@ -30,11 +30,11 @@
     margin-right:-1px;
 }
 
-.ganttProject{ /* Cases centrales d'un projet classique */
+.ganttProject{ /* Usual project : central cells */
     margin-right:-1px;
 }
 
-.ganttProjectStart{ /* Première case d'un projet classique */
+.ganttProjectStart{ /* Usual project : first cell */
 	float:right;
 	width:100%;
 	border-left: 1px solid black;
@@ -44,7 +44,7 @@
 	padding-right:1px;
 }
 
-.ganttProjectEnd{ /* Dernière case d'un projet classique */
+.ganttProjectEnd{ /* Usual project : last cell */
 	width:85%;
 	border-right:1px solid black;
 	border-top-right-radius:3px;;
@@ -53,13 +53,13 @@
     margin-right:2px;
 }
 
-.ganttEmbed{ /*Titre et numéro du jour*/
+.ganttEmbed{ /* Diagram title and number of the current day */
     text-transform:uppercase;
     font-weight:bold;
     
 }
 
-#ganttTitle{ /* Titre du diagramme */
+#ganttTitle{ /* Diagram's title */
     position:absolute;
     display:flex;
     align-items:center;
@@ -69,26 +69,26 @@
 }
 
 
-#time{/*marqueur aujourd'hui*/
+#time{/* Marker of the current day */
 	position:absolute;
 	top: 72px;
 	width:3px;	
 	z-index: 3;
 }
 
-.ganttObject{ /* Etoiles et contraintes */
+.ganttObject{ /* Constraints and stars */
 	position:absolute;
     z-index:2;
 }
 
-path{ /* Trait de flèche */
+path{ /* Arrow line */
 	stroke-width:3px;
     stroke-linecap:round;
     fill:none;
 }
 
 
-#ganttDiagram table td{ /* Cases du diagramme */
+#ganttDiagram table td{ /* Diagram cells */
     
 	text-align:center;
 	border:1px solid rgba(0,0,0,0.5);
@@ -100,7 +100,7 @@ path{ /* Trait de flèche */
 }
 
 
-#ganttHeader{ /*Mois et jours (en haut)*/
+#ganttHeader{ /* Months and days */
 	position:relative;
 	left:200px;
     width:480px;
@@ -110,7 +110,7 @@ path{ /* Trait de flèche */
     z-index:4;
 }
 
-#ganttSider{ /* Noms et avancement des projets (à gauche) */
+#ganttSider{ /* Name and projects progresses */
     position:absolute;
     top:72px;
 	width: 200px;
@@ -121,11 +121,11 @@ path{ /* Trait de flèche */
 	z-index:2;
 }
 
-#ganttSider table{
+#ganttSider table{ 
     width:100%;
 }
 
-#ganttDays{ /* Conteneur des jours et des projets */
+#ganttDays{ /* Projects renderer container */
 	position:absolute;
     left:200px;
     top:0px;

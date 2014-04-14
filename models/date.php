@@ -3,26 +3,28 @@
 defined('_JEXEC') or die('Restricted access');
 
 /********************************************************************************
- * Modèle de gestion des dates
- * Fournis les méthodes relatives au calendrier, aux dates et au calcul de durée
+ * Date management model
+ * Provides several methods to handle a calendar, dates and durations
+ * Notice : the timestamp format referes to a timestamp-formatted int
  ********************************************************************************/
  
 class GanttReaderDate{
 
 	/**
-	 * @params (int) $range le nombre de mois à afficher avant le mois du jour $current (par défaut, aujourd'hui)
-	 * @return (timestamp) la date du premier jour du mois d'il y a $range mois
+	 * @return (timestamp) the first day of the month, $frame months before the current month
+	 * @param (int) $frame how many months shall be counted to give the first day of that month
+	 * @param (timestamp) $current (default = null) a date of the month to consider as the 'current' month
 	 */
-	static function earliestMonth($range, $current=NULL){
+	static function earliestMonth($frame, $current=NULL){
 		
 		if($current==NULL){
-			$current = time(); //par défaut : aujourd'hui
+			$current = time(); //default value is today
 		}
 		
 		$year = date('Y', $current);
 		$month = date('m', $current);
 		
-		$month = $month-$range;
+		$month = $month-$frame;
 		
 		if($month<0){
 			$month = 12+$month;
@@ -33,19 +35,20 @@ class GanttReaderDate{
 	}
 	
 	/**
-	 * @params (int) $range le nombre de mois à afficher avant le mois du jour $current (par défaut, aujourd'hui)
-	 * @return (timestamp) la date du dernier jour du mois dans $range mois
+	 * @return (timestamp) the last day of the month, $frame months after the current month
+	 * @param (int) $frame how many months shall be counted to give the last day of that month
+	 * @param (timestamp) $current (default = null) a day of the month to consider as the 'current' month
 	 */
-	static function lastestMonth($range, $current=NULL){
+	static function lastestMonth($frame, $current=NULL){
 		
 		if($current==NULL){
-			$current = time(); //par défaut : aujourd'hui
+			$current = time(); //default value is today
 		}
 		
 		$year = date('Y', $current);
 		$month = date('m', $current);
 		
-		$month = $month+$range;
+		$month = $month+$frame;
 		
 		if($month>12){
 			$month = $month-12;
@@ -60,28 +63,28 @@ class GanttReaderDate{
 	
 	
 	/**
-	 * @param (timestamp) la date du jour à étudier
-	 * @return (boolean) true si le jour concerné est un week end, faux sinon
+	 * @return (boolean) true if the given day is a Saturday or a Sunday
+	 * @param (timestamp) the day to process
 	 */
 	static function isWeekEnd($timestamp){
 		$day = date('N', $timestamp);
-		return ($day>5); //true si le 5ème jour de la semaine est déjà passé
+		return ($day>5); //true if the 5th day of the week is already past
 	}
 	
 	/**
-	 * @param (timestamp) $jour la date du jour a étudier
-	 * @param (array) $vacations le tableau des plages de congés
-	 * @return true s'il s'agit d'un jour en congé, faux sinon
-	 * How : parcours partiel, retour direct avec true si une plage de congé correspondante est balayée
-	 * 		 Si toutes les plages ont été balayées et qu'aucune n'intègre le jour donné, alors renvoyer false
+	 * @return true if it's a day of vacation (i.e. it belongs to a vacation frame)
+	 * @param (timestamp) $day the day to process
+	 * @param (array) $vacations the list of vacations frames
+	 * How : partial scan, return true as soon as a surrounding vacation frame is found, 
+	 * 		 If no matching frame were scanned, return false
 	 */
-	static function isVacation($jour, &$vacations){
+	static function isVacation($day, &$vacations){
 		if(isset($vacations)){
 			foreach($vacations as $vacation){
 				$start = strtotime($vacation['start']);
 				$end = strtotime($vacation['end']);
 				
-				if(GanttReaderDate::inSight($jour, $start, $end)){ //si la date est dans une période de congé
+				if(GanttReaderDate::inSight($day, $start, $end)){ //si la date est dans une période de congé
 					return true;
 				}
 			}
@@ -90,8 +93,8 @@ class GanttReaderDate{
 	}
 	
 	/**
-	 * @params (timestamp) $jour la date du jour à étudier
-	 * @return (boolean) true si le jour est vaqué ( càd non travaillé), faux sinon
+	 * @params (timestamp) $day the day to process
+	 * @return (boolean) true if the day is off
 	 */
 	static function inRest($jour, &$vacations){
 		return (GanttReaderDate::isVacation($jour, $vacations) || GanttReaderDate::isWeekEnd($jour));	
@@ -99,8 +102,9 @@ class GanttReaderDate{
 	
 	
 	/**
-	 * @params (timestamp) $dateA et $dateB  les dates entre lesquelles il faut mesurer l'écart
-	 * @return (int) le nombre de jours entre les deux dates
+	 * @params (timestamp) $dateA et $dateB  the days between wich you measure the gap
+	 * @return (int) the number of days between the two days
+	 * @see www.php.net/manual/en/book.datetime.php
 	 */
 	static function gap($dateA, $dateB){
 		$start = new DateTime(date('Y-m-d', $dateA));
@@ -110,53 +114,55 @@ class GanttReaderDate{
 	}
 	
 	/**
-	 * @params (timestamp) $jour la date du jour à étudier, $earliest et $lastest les dates des premier et dernier jours de la vue
-	 * @return true si le jour donné est compris entre $earliest et $lastest, faux sinon
+	 * @params (timestamp) $day the day to process, $earliest & $lastest the first & the last days of the view
+	 * @return true if the given day is between $earliest & $lastest, false otherwise
 	 */
-	static function inSight($jour, $earliest, $lastest){
-		return ($jour>=$earliest && $jour<=$lastest);
+	static function inSight($day, $earliest, $lastest){
+		return ($day>=$earliest && $day<=$lastest);
 	}
 	
 	/**
-	 * @param (array) $project le projet à étudier
-	 * @param (int) $case le numéro de la $case à traiter (0 est la première case du projet, $project['longueur']-1 en est la dernière)
-	 * @return (boolean) true si la case doit adopter le style "complétée", false sinon
+	 * @param (array) $project the processed project
+	 * @param (int) $cell the index this project's cell (0 is the first one, $project['length']-1 is the last one)
+	 * @return (boolean) true if the cell has a completed style, false otherwise
 	 */
-	 static function completed($project, $case){
+	 static function completed($project, $cell){
 		 
-		$duree = $project['longueur'];
+		$duration = $project['length'];
 		
-		if($duree==0){
-			return $project['avancement']==100; //Les projets d'un seul jour ne sont remplis qu'à 100%, pas avant
+		if($duration==0){
+			return $project['progress']==100; //One-day projects cells are completed at 100%, never before
 		}
 		
-		$rapport = round((($case+1)/$duree)*100); //rapport entre l'avancement relatif de la case sur l'avancement réel
+		$ratio = round((($cell+1)/$duration)*100); //Ration of relative progress of the cell over global progress
 
-		return ($rapport<=($project['avancement'])); // true si l'avancement "recouvre" la case actuelle 
+		return ($ratio<=($project['progress'])); // True if the progress 'covers' the cell
 	 }
 	
 	
 	/**
-	 * @params (timestamp) $earliest et $lastest, les  dates des mois entre lesquels il faut donner les noms
-	 * @return array les noms des mois situés entre $earliest et $lastest (inclus) ainsi que leur durée en jours
+	 * @params (timestamp) $earliest & $lastest, the first and the last months of the view
+	 * @return (array) name months between $earliest et $lastest (included) & their length in days
 	 * ex. ['name'] => 'January'; ['length'] => 31 ... ['name'] => 'February'; ['length'] => 28 etc.
-	 * NB : les mois sont traduits dans la langue de l'utilisateur Joomla
+	 * NB : months are translated in user's language by Joomla
 	 * @see http://docs.joomla.org/JText/_()
-	 * How : parcours total
+	 * How : full scan
 	 */
 	static function listMonths($earliest, $lastest){
 		
-		$current = $earliest; //pointer vers le premier mois
+		$current = $earliest; //Point at the first month of the frame
 		
 		do{
-			$name = JText::_(strtoupper(date('F', $current))); //mois en majuscules, traduit dans la langue de l'utilisateur via l'API Joomla
+			$name = JText::_(strtoupper(date('F', $current))); //ready-to-translate format for Joomla API
+			
 			$length = date('t', $current);
+			
 			$months[]= array(
 							'name' => $name, 
 							'length' => $length
 							);
 			
-			$current = GanttReaderDate::lastestMonth(1, $current); //sauter au mois suivant
+			$current = GanttReaderDate::lastestMonth(1, $current); //jump to the next month
 			
 		} while($current<=$lastest);
 		
@@ -165,26 +171,26 @@ class GanttReaderDate{
 	}
 	
 	/**
-	 * @params (timestamp) $earliest et $lastest, les  dates des jours entre lesquels il faut donner les numéros
-	 * @param (array) $vacations le tableau des plages de congés
-	 * @return array les numéros des jours situés entre $earliest et $lastest (inclus) selon 
-	 *		['jour'] => (int) numero
-	 *		['vacation'] => (boolean) estEnVacance
-	 *		['today'] => (boolean) estAujourd'hui
-	 * How : Parcours total
+	 * @params (timestamp) $earliest & $lastest, the days between you want the numbers
+	 * @param (array) $vacations the vacations frames
+	 * @return (array) the numbers of the days between $earliest & $lastest (included) as
+	 *		['day'] => (int) number
+	 *		['vacation'] => (boolean) is off
+	 *		['today'] => (boolean) is the current day
+	 * How : full scan
 	 */
 	static function listDays($earliest, $lastest, &$vacations){
 		
-		$current = $earliest; //pointer sur le premier jour
+		$current = $earliest; //point at the first day
 		
 		do{
 			$days[] = array(
-							'jour' => date('d', $current),
+							'day' => date('d', $current),
 							'vacation' => GanttReaderDate::inRest($current, $vacations),
-							'today' => (strtotime(date('Y-m-d', time()))==$current) //vrai si la date == aujourd'hui, faux sinon
+							'today' => (strtotime(date('Y-m-d', time()))==$current) //true if time()==today
 							);
 							
-			$current = strtotime('+1 day', $current);//passer au jour suivant
+			$current = strtotime('+1 day', $current);//jump to next day
 			
 		} while($current<=$lastest);
 		
@@ -192,39 +198,39 @@ class GanttReaderDate{
 	}
 	
 	/**
-	 * @param (int) $range le nombre de mois à afficher de part et d'autre du mois courant,
-	 * @param (array) $project le projet à traiter
-	 * @return (boolean) true si le projet est censé être affiché dans le rendu (i.e au moins une partie se trouve dans la fenêtre), false sinon
+	 * @param (int) $frame number of months on both sides of the current month
+	 * @param (array) $project to process
+	 * @return (boolean) true if the project shall be rendered (i.e at lesat a part of it appears in the view), false otherwise
 	 */
-	 static function inWindow($range, $project){
+	 static function inWindow($frame, $project){
 		 
-		$earliest = GanttReaderDate::earliestMonth($range);
-		$lastest = GanttReaderDate::lastestMonth($range);
+		$earliest = GanttReaderDate::earliestMonth($frame);
+		$lastest = GanttReaderDate::lastestMonth($frame);
 		
 		
-			$start = strtotime($project['debut']);	// date de début du projet
-			$end = strtotime('+'.$project['longueur'].' days', $start); // date de fin du projet
+			$start = strtotime($project['start']);	// start date of project
+			$end = strtotime('+'.($project['length']-1).' days', $start); // project's last day
 			
 			return(
-				GanttReaderDate::inSight($start, $earliest, $lastest)||	//Si début du projet inclus ...
-				GanttReaderDate::inSight($end, $earliest, $lastest)|| 	//ou si fin incluse ...
-				($start==$earliest && $end==$lastest)||					//ou si fait exactement le même taills
-				GanttReaderDate::inSight($earliest, $start, $end));		//ou si le projet recouvre la vue entière : renvoyer vrai
+				GanttReaderDate::inSight($start, $earliest, $lastest)||	//If start included
+				GanttReaderDate::inSight($end, $earliest, $lastest)|| 	//or end included
+				($start==$earliest && $end==$lastest)||					//or overlaps the view
+				GanttReaderDate::inSight($earliest, $start, $end));		//or exactly covers the view : return true, false otherwise 
 	}
 	
 	
 	/**
-	 * @param (array) $projects le tableau des projets originel,
-	 * @param (int) $range le nombre de mois à afficher de part et d'autre du mois courant
-	 * @return (array) le tableau des projets, filtrés (i.e qui devront apparaitre dans le rendu)
+	 * @param (array) $projects the original projects list
+	 * @param (int) $frame how many months shalll be displayed on both sides of the current month
+	 * @return (array) the filtered projects list (i.e that shall be rendered)
 	 */
-	static function filterProjects(&$projects, $range){	
+	static function filterProjects(&$projects, $frame){	
 	  	$out=null;
 		if(isset($projects)){
 			foreach($projects as &$project){	
-				if(GanttReaderDate::inWindow($range, $project)){
+				if(GanttReaderDate::inWindow($frame, $project)){
 					$out[]=$project;
-				}//else echo($project['nom'].' a été supprimé <br />');
+				}
 			}
 		}
 		
@@ -232,43 +238,37 @@ class GanttReaderDate{
 	}
 	
 	/**
-	 * @param (array) $project le projet à étudier
-	 * @param (array) $vacations le tableau des plages de congés
-	 * @return (int) la taille finale du projet, càd le nombre de jours occupés par le projet donné
-	 * How : parcourir le projet depuis la date de début et ce, sur la durée du projet.
-	 * 		(NB : GanttProject ne compte que les jours ouvrés)
-	 * 		On compte donc les jours vaqués puis on additionne ouvrés et vaqués
+	 * @param (array) $project to process
+	 * @param (array) $vacations the vacations frames
+	 * @return (int) the calculated length of the project, i.e. how many days the project will be occupied
+	 * How : GanttProject provides worked days, just add the off days
 	 */
-	 static function projectLength($debut, $duree, $vacations){
+	 static function projectLength($start, $duration, $vacations){
 		 
-		 if($duree==0){ // Un meeting ou un projet ne dure rien selon GanttProject, corriger en renvoyant 1
+		 if($duration==0){ // A meeting lasts 0 day according to GanttProject, patch it by returning 1
 			return 1;
 		}
 		 
-		$current = strtotime($debut); //placer un repère sur le jour de début
+		$current = strtotime($start); //point at the first day
 		
-		$conges = 0; //compter le nombre de jours vaqués
+		$off = 0; //Prepare to count the off days
 		
-		$ouvres = $duree; //nombre de jours ouvrés à parcourir
-		
-		
-		
-		 
+		$worked = $duration; // how many worked days ?
 		 
 		 do{
 			 			 
 			 $current = strtotime('+1 day', $current);
 			 
 			 if(!GanttReaderDate::inRest($current, $vacations)){
-				$ouvres--; 
+				$worked--; 
 			 } else{
-				$conges++; 
+				$off++; 
 			 }
 			 
-		 }while($ouvres>1);
+		 }while($worked>1);
 		 
 
-		 return ($duree+$conges)-1;
+		 return ($duration+$off);
 	 }
 }
 

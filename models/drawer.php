@@ -3,30 +3,30 @@
 defined('_JEXEC') or die('Restricted access');
 
 /***********************************************************************************************************************************
- * Modèle de rendu
- * Recense les méthodes permettant d'obtenir un rendu visuel du diagramme
- * @return par défaut des méthodes, sauf mention contraire : $out le rendu visuel en HTML, prétraité pour le rendu dans le template
- * Noe : l'objet timestamp fait référence à un int formaté pour représenter un timestamp
+ * Renderer model
+ * Provides the methods allowing the needed elements to be displayed
+ * @return by default for all methods of this class, if nothing else is specified : (String) $out the HTML render of the element
+ * Note : the timestamp Object refers to a timestamp formatted int.
  ***********************************************************************************************************************************/
 class GanttReaderDrawer{
 	
 	/**
-	 * @param (String) $titre le titre du diagramme
-	 * @params (array) $projets, $vacances, $contraintes les listes des projets, des plages de congés et des contraintes
-	 * @params (timestamp) les dates limites du diagramme : $earliest et $lastest
-	 * @return void, affiche le rendu HTML du diagramme de Gantt
+	 * @param (String) $title the diagram's title
+	 * @params (array) $projects, $vacations, $constraints the lists containing the named informations
+	 * @params (timestamp) $earliest & $lastest he limit dates of the view
+	 * @return void, draws the diagram's HTML render
 	 */
-	static function drawDiagram($titre, &$projets, &$vacances, &$contraintes, $earliest, $lastest){
+	static function drawDiagram($title, &$projects, &$vacations, &$constraints, $earliest, $lastest){
 		
 	$out=('<div id="ganttDiagram">');
 	
-	$out.= GanttReaderDrawer::drawTitle($titre);
+	$out.= GanttReaderDrawer::drawTitle($title);
 	
-	$out.= GanttReaderDrawer::drawHeader($vacances, $earliest, $lastest);
+	$out.= GanttReaderDrawer::drawHeader($vacations, $earliest, $lastest);
 	
-	$out.= GanttReaderDrawer::drawSider($projets);
+	$out.= GanttReaderDrawer::drawSider($projects);
 
-	$out.= GanttReaderDrawer::drawProjects($projets, $vacances, $contraintes, $earliest, $lastest);
+	$out.= GanttReaderDrawer::drawProjects($projects, $vacations, $constraints, $earliest, $lastest);
 	
 	$out.=('</div>');
 		
@@ -35,15 +35,15 @@ class GanttReaderDrawer{
 	}
 
 	/**
-	 * Dessine les projets et leur conteneur
-	 * @params (array) $projets, $vacances, $contraintes les listes des projets, des plages de congés et des contraintes de suivi
-	 * @params (timestamp) $earliest et $lastest les dates au plus tôt et au plus tard de la vue
-	 * How : dans le conteneur ganttDays (dont les scrolls sont synchronisés avec d'autres éléments),
-	 *		pour chaque projet à afficher, dessiner sa ligne (bourrage à gauche, projet, bourrage à droite)
+	 * Draws the projects and their container
+	 * @params (array) $projects, $vacations, $constraints the extracted informations from the parser
+	 * @params (timestamp) $earliest & $lastest dates of the view
+	 * How : in the ganttDays container (whose scrollbars are synced to the corresponding elements : ganttHeader & ganttSider),
+	 *		for each project , draw its line (left padding, the project itself, then right padding)
 	 */
-	static function drawProjects(&$projets, &$vacances, &$contraintes, $earliest, $lastest){
-		
-		$paddings = NULL; //Par défaut, pas de paddings : protège de l'absence de projets
+	static function drawProjects(&$projects, &$vacations, &$constraints, $earliest, $lastest){
+		/* TODO : remove if still working (as expected) */
+		//$paddings = NULL; //The default is no padding (if there's no project to display)
 		
 		$out='<div id="ganttDays" onscroll="'.
 		
@@ -53,26 +53,24 @@ class GanttReaderDrawer{
 				
 				'><table>';
 
-		//dessiner les projets eux-mêmes
-		if(isset($projets)){
+		//draw the projects itselves
+		if(isset($projects)){
 			
-			foreach($projets as $projet){
-				
-				$out.= GanttReaderDrawer::drawLine($projet, $vacances, $earliest, $lastest);
-
+			foreach($projects as $project){
+				$out.= GanttReaderDrawer::drawLine($project, $vacations, $earliest, $lastest);
 			}
 			
 		}
 		
-		//ensuite dessiner les objets (barre d'aujourd'hui et contraintes) entre les projets
-		$out.= GanttReaderDrawer::drawObjects($earliest, $contraintes, $projets);
+		//then draw the "floating objects" (i.e bar of the current day & the constraints)
+		$out.= GanttReaderDrawer::drawObjects($earliest, $constraints, $projects);
 		
 		$out.='</table></div>';
 		
-		//nombre de pixels bord gauche --> barre du jour
+		//how many pixels are counted between the left-border of the container and the today marker ?
 		$scroll = (round((GanttReaderDate::gap($earliest, strtotime(date('Y-m-d', time())))*36)-232)); 
 		
-		$out.='<script type="text/javascript">'.
+		$out.='<script type="text/javascript">'. //now javascript scrolls to  the today marker
 		
 			'document.getElementById(\'ganttDays\').scrollLeft = '.$scroll.';'.
 			
@@ -82,19 +80,19 @@ class GanttReaderDrawer{
 	}
 	
 	/**
-	 * Dessine le bloc de gauche (titres des projets et avancement respectif)
-	 * @param (array) la liste des projets
+	 * Draws the left block (projects names and progress percentage)
+	 * @param (array) the projects list
 	 */
-	static function drawSider(&$projets){
+	static function drawSider(&$projects){
 		
 		$out='<div id="ganttSider"><table>';
 		
-		if(isset($projets)){
+		if(isset($projects)){
 			
-			foreach($projets as $projet){
+			foreach($projects as $project){
 				
-				$out.='<tr><td>'.$projet['nom'].' ('.$projet['avancement'].'%)</td></tr>';
-				
+				$out.='<tr><td>'.$project['name'].' ('.$project['progress'].'%)</td></tr>';
+
 			}
 			
 		}
@@ -105,21 +103,21 @@ class GanttReaderDrawer{
 	}
 	
 	/**
-	 * Dessine le titre du diagramme
-	 * @param (String) $titre le titre du diagramme
+	 * Draws the diagram's title
+	 * @param (String) the $title
 	 */
-	static function drawTitle($titre){
-		$out= '<div id="ganttTitle" class="ganttEmbed">'.$titre.'</div>';
+	static function drawTitle($title){
+		$out= '<div id="ganttTitle" class="ganttEmbed">'.$title.'</div>';
 		return $out;
 	}
 	
 	
 	/**
-	 * Dessine le bloc du haut (Liste des mois et de leur jours)
-	 * @param(array) $vacances la liste des plages de congés,
-	 * @params $earliest et $lastest : les dates de début et de fin du diagramme
+	 * Draws the top block (Months & days listing)
+	 * @param(array) $vacations the vacations frames list
+	 * @params (timestamp) the $earliest & $lastest dates of the view
 	 */
-	static function drawHeader(&$vacances, $earliest, $lastest){
+	static function drawHeader(&$vacations, $earliest, $lastest){
 		$out='<div id="ganttHeader">'.
 			 '<table>'.
 			 '<tr>';
@@ -129,7 +127,7 @@ class GanttReaderDrawer{
 		$out.='	</tr>
 				<tr>';
 				
-		$out.=GanttReaderDrawer::drawDays($earliest, $lastest, $vacances);
+		$out.=GanttReaderDrawer::drawDays($earliest, $lastest, $vacations);
 		
 		$out.='</tr></table></div>';
 		
@@ -137,8 +135,8 @@ class GanttReaderDrawer{
 	}
 	
 	/**
-	 * Dessine la liste des mois entre les deux dates données
-	 * @params (timestamp) $earliest et $lastest les dates entre lesquelles on veut la liste des mois
+	 * Draws the months list between two given dates
+	 * @params (timestamp) the $earliest & $lastest between which list the names
 	 */
 	static function drawMonths($earliest, $lastest){
 		
@@ -154,71 +152,72 @@ class GanttReaderDrawer{
 	}
 	
 	/**
-	 * Dessine les objets flottants du siagramme, à savoir les flèches de contraintes et la barre du jour
-	 * @param (timestamp) $earliest la date du premier jour du diagramme,
-	 * @params (array) $contraintes, $projets les listes des contraintes et des projets
+	 * Draws the diagram's floating objects, like constraints & the today marker
+	 * @param (timestamp) $earliest the first date of the view
+	 * @params (array) $constraints, $projects the parsed informations of the same name
 	 */
-	static function drawObjects($earliest, $contraintes, $projets){
+	static function drawObjects($earliest, $constraints, $projects){
 		
 		$out='<div '.
-		'style="height:'.(count($projets)*36).'px; '.
+		'style="height:'.(count($projects)*36).'px; '.
 		'left:'.(round((GanttReaderDate::gap($earliest, strtotime(date('Y-m-d', time())))*36)+35/2)).'px;" '.
-		'id="time" '.
-		'>'.
-		'</div>';
+		'id="time" ></div>';
 		
-		for($i=0; $i<count($contraintes); $i++){
-			$out.=GanttReaderDrawer::drawConstraint($contraintes[$i], $projets, $earliest);
+		for($i=0; $i<count($constraints); $i++){
+			
+			$out.=GanttReaderDrawer::drawConstraint($constraints[$i], $projects, $earliest);
+			
 		}
 		
 		return $out;	
 	}
 	
 	/**
-	 * Dessine les contraintes de suivi entre les tâches
-	 * @params la $contrainte à dessiner, les tableaux des $projets et des $paddings et la date au plus tôt du diagramme $earliest
-	 * How : Calculer la taille du premier projet pour définir sa date de fin
-	 * 		 Calculer les coordonnées de départ de la contrainte (xA, yA) et d'arrivée (xB, yB)
-	 *		 abscisse = nombre de jours depuis la date au plus tôt * largeur des cases
-	 *		 ordonnée = index d'apparition du projet * hauteur des cases + 2 cases (+0.5 case si se place à mi-hauteur d'une case)
-	 *		 Chaque contrainte est ensuite modélisée dans un graphique SVG à partir de ses propriétés
+	 * Draws the following constraints between the tasks
+	 * @params (array) $constraint to draw, the $projects list & the $paddings list
+	 * @param (timestamp) the $earliest date of the view
+	 * How : Define the end date of the source project via its length
+	 * 		 Define the start coordinates of the constraint (xA, yA) & of end (xB, yB)
+	 *		 X axis = count of days since $earliest * cells width
+	 *		 Y axis = index of project's appearance * cells height + 2 cells (+0.5 cell if starts at mid-height)
+	 *		 Each constraint is modelled through a SVG graph according to its properties
 	 * @see www.w3.org/Graphics/SVG/
 	 */
-	static function drawConstraint($contrainte, $projets, $earliest){
+	static function drawConstraint($constraint, $projects, $earliest){
 		
-		$projA = $projets[$contrainte['from']];
-		$projB = $projets[$contrainte['to']];
+		$projA = $projects[$constraint['from']];
+		$projB = $projects[$constraint['to']];
 				
-		$endA = strtotime($projA['debut'].'+'.($projA['longueur']+1).'days'); //fin du projet source : date de début + durée + décalage
+		$endA = strtotime($projA['start'].'+'.($projA['length']).'days'); //source project's end : start date + length
 
 		
-		$startB = strtotime($projB['debut']);		
+		$startB = strtotime($projB['start']);		
 		
 		$xA = GanttReaderDate::gap($earliest, $endA)*36;
-		$yA = $contrainte['from']*36+35*2.5;
+		$yA = $constraint['from']*36+35*2.5;
 		
 		$xB = GanttReaderDate::gap($earliest, $startB)*36+35/2;
-		$yB = $contrainte['to']*36+35*2;
+		$yB = $constraint['to']*36+35*2;
 		
 
 		
-		if($endA > $startB){ //si départ et arrivée le même jour (meetings)
-			$xA = $xB; 		//ne pas déplacer horizontalement
+		if($endA > $startB){ //if start and end are the same day (for instance with meetings)
+			$xA = $xB; 		//so don't move the X axis
 			
-			/* On corrige les hauteurs de départ et d'arrivée */
-			if($contrainte['from']>$contrainte['to']){ //si viens d'en bas
+			/* Correct the start and end heights */
+			if($constraint['from']>$constraint['to']){ //if comes from below
 				$yA = $yA -15;
 				$yB = $yB -15;
 
-			}elseif($contrainte['to']>$contrainte['from']){ //si viens d'en haut
+			}elseif($constraint['to']>$constraint['from']){ //if comes from above
 				$yA = $yA +10;
 				$yB = $yB + 10;
 			}
 
 		}
 		
-		if($contrainte['from']>$contrainte['to']){ //si la contrainte viens d'en bas (mais d'un jour différent)
-			$yB = $yB + 31+10; //point d'arrivée par le bas
+		if($constraint['from']>$constraint['to']){ //if comes from below (but from a different day)
+			$yB = $yB + 31+10; //arrival point from below
 		}
 		
 		
@@ -237,9 +236,9 @@ class GanttReaderDrawer{
 				
 				<defs>
 				
-					<!-- Marqueur de la fin d\'un tracé : les contraintes pointent avec une flèche à leur extremité -->
-					<marker id="fleche" markerWidth="20" markerHeight="15" refX="2.5" refY="7.5" markerUnits="userSpaceOnUse" orient="auto">
-						<!-- flèche -->
+					<!-- End layout\'s marker : constraints points with an arrow at their end -->
+					<marker id="arrow" markerWidth="20" markerHeight="15" refX="2.5" refY="7.5" markerUnits="userSpaceOnUse" orient="auto">
+						<!-- arrow -->
 						<path
        						d="M 7.5,7.5 0,0 0,15 z"
        						style="fill:white; fill-rule:evenodd; stroke:white; 
@@ -248,29 +247,29 @@ class GanttReaderDrawer{
 					
 				</defs>
 								
-				<!-- Le tracé de la contrainte elle-même -->
+				<!-- the constraint layout itself -->
 				<path 
 					class="ganttObject" 
 					d="
 					M '.$xA.','.$yA.' 
 					H '.$xB.'
 					V'.$yB.'" 
-					style="marker-end:url(#fleche)" />
+					style="marker-end:url(#arrow)" />
 			</svg>';
 		
 		return $out;
 	}
 	
 	/**
-	 * Dessine la liste des jours présents entre deux dates données
+	 * Draws the list days between two dates
 	 * ex: 01, 02, 03 ... 28, 29, 30, 01, 02, 03, ...
-	 * @params timestamp) $earliest et $lastest, les dates entre lesquelles on veut la liste des jours
+	 * @params (timestamp) the $earliest & $lastest dates of the view
 	 */
-	static function drawDays($earliest, $lastest, &$vacances){
+	static function drawDays($earliest, $lastest, &$vacations){
 		
 		$out='';
 		
-		$days = GanttReaderDate::listDays($earliest, $lastest, $vacances);
+		$days = GanttReaderDate::listDays($earliest, $lastest, $vacations);
 		
 		foreach($days as $day){
 			
@@ -284,30 +283,31 @@ class GanttReaderDrawer{
 				$out.=' ganttEmbed';	
 			}
 			
-			$out.='">'.$day['jour'];
+			$out.='">'.$day['day'];
 			
 			$out.='</td>';
 			
 		}
+		
 		return $out;
 	}
 	
-	
-	
 	/**
-	 * Dessine des jours vides (style spécial pour les jours vaqués) d'une date à une autre
-	 * @params (timestamp) $earliest et $lastest les dates entre lesquelles on veut placer des jours vides
-	 * @param (array) $vacances la liste des plages de congés
+	 * Draws the empty days (special style for of days) from a date to another
+	 * @params (timestamp) the $earliest & $lastest dates to fill up
+	 * @param (array) the $vacations frames list
 	 */
-	static function drawPadding($earliest, $lastest, &$vacances){
+	static function drawPadding($earliest, $lastest, &$vacations){
 		
-		if($earliest>=$lastest){ //Si erreur dans les paramètres ou padding hors-zone (résulte que lastest est avant earliest)
-			return '';
+		if($earliest>=$lastest){ //If error with parameters or off-zone padding (i.e latest is before earliest)
+			return ''; //then return nothing : no padding
 		}
 		
 		$out='';
 		
-		$days = GanttReaderDate::listDays($earliest, $lastest, $vacances);
+		$days = GanttReaderDate::listDays($earliest, $lastest, $vacations);
+		
+		
 		
 		foreach($days as $day){
 			$out.='<td class="dayBox';
@@ -319,34 +319,30 @@ class GanttReaderDrawer{
 			$out.='"></td>';
 			
 		}
+		
 		return $out;
 	}
 	
 	/**
-	 * Dessine une ligne de projet : la représentation du projet, avec bourrage avant et après pour remplir la vue
-	 * @params (array) $projet, $vacances les listes des projets et des plages de congés
-	 * @params (timestamp) $earliest et $lastest les dates de début et de fin du diagramme
-	 * How : on dessine les cases vides avant le projet, 
-	 *		on récupère le rendu du projet
-	 * 		on dessine le projet puis les cases vides qui suivent le projet (de fin du projet + décalage à fin de la fenêtre)
+	 * Draws a project line : the projects render, surrounded with a padding on each side to fill up the line
+	 * @params (array) the $project to process, the list of $vacations frames
+	 * @params (timestamp) $earliest et $lastest the limit dates of the view
 	 */
-	static function drawLine($projet, &$vacances, $earliest, $lastest){
+	static function drawLine($project, &$vacations, $earliest, $lastest){
 	
-		$before = strtotime('-1 day', strtotime($projet['debut'])); //1 jour avant le projet
+		$before = strtotime('-1 day', strtotime($project['start'])); //1 day before the project
 		
 		$out='<tr>';
 		
-		$out.= GanttReaderDrawer::drawPadding($earliest, $before, $vacances); //bourrage avant
+		$out.= GanttReaderDrawer::drawPadding($earliest, $before, $vacations); //before padding
 		
-		$out.= GanttReaderDrawer::drawProject($projet, $vacances, $earliest, $lastest); //array (rendu du projet + décalage)
+		$out.= GanttReaderDrawer::drawProject($project, $vacations, $earliest, $lastest);// the project itself
 
-		$after = strtotime('+'.($projet['longueur']+1).' days', strtotime($projet['debut'])); //le décalage +1 jour après le projet
+		$after = strtotime('+'.($project['length']).' days', strtotime($project['start'])); //+1 day after project's end
+
+
 		
-		if($projet['meeting']){
-			$after = strtotime('-1 day', $after);
-		}
-		
-		$out.= GanttReaderDrawer::drawPadding($after, $lastest, $vacances);//bourrage après
+		$out.= GanttReaderDrawer::drawPadding($after, $lastest, $vacations);//padding after
 		
 		$out.='</tr>';
 
@@ -354,56 +350,59 @@ class GanttReaderDrawer{
 	}
 	
 	/**
-	 * Dessine les cases du projet donné
-	 * @params le $projet et le tableau des $vacances
+	 * Draws the cells of the given project
+	 * @params the $project & the $vacations frames
 	 * How :
-	 * 		On traite les cas particuliers (meetings, projets d'une seule journée, projets pères) avec une procédure spécifique
-	 *		Les cas spéciaux passés, dessiner successivement le premier jour, les cases intermédiaires puis le dernier jour du projet.
+	 * 		Process the particular cases (meetings, one-day projects, father projects) with a specific procedure
+	 *		The special cases past, draw successively the first day, the middle cells and then the last day
 	 * @see www.w3.org/Graphics/SVG/
 	 */
-	static function drawProject($projet, $vacances, $earliest, $lastest){
+	static function drawProject($project, $vacations, $earliest, $lastest){
 		
-		if($projet['hasChild']){
-			return ganttReaderDrawer::drawFather($projet, $vacances); //Si projet englobant
+		if($project['hasChild']){
+			return ganttReaderDrawer::drawFather($project, $vacations); // If the project has a child or more
 		}
 		
-		$start = strtotime($projet['debut']);
-		$end = strtotime('+'.($projet['longueur']).' days', $start);
+		$start = strtotime($project['start']);
 		
-		$current = strtotime($projet['debut']); //on place un repère sur la date de début
-		$actuel = 0; //compteur de l'avancement total du dessin, décalages compris
+		$end = strtotime('+'.($project['length']-1).' days', $start);
+
+		$current = strtotime($project['start']); //place a mark on the start date
+		
+		$now = 0; //counts the total progress of the drawing
 		
 		$out='<td class="daybox';
 		
-			if (GanttReaderDate::inRest($current, $vacances)){
+			if (GanttReaderDate::inRest($current, $vacations)){
 				$out.= ' dayOff';
 			}
 			
 		$out.='">';
 		
 		
-		if($projet['meeting']){
+		if($project['meeting']){
 						
-			/*Dessin vectoriel SVG d'une étoile*/
-			$out.= GanttReaderDrawer::drawStar($projet['couleur']);			
+			/* Vectorial drawing of a star in SVG */
+			$out.= GanttReaderDrawer::drawStar($project['color']);	
+					
 			$out.='</td>';
 			
-		} elseif($projet['longueur']==0){ //si ne dure qu'un jour
-			  
-			$out.='<div style="background-color:'.$projet['couleur'].'" class="ganttProjectEnd ganttProjectStart';
+		} elseif($project['length']==1){ // if lasts a single day
+
+			$out.='<div style="background-color:'.$project['color'].'" class="ganttProjectEnd ganttProjectStart';
 		
-			if($projet['avancement']==100){
+			if($project['progress']==100){
 				$out.=' complete';
 			}
 		
 			$out.='"></div></td>';
 			
-		} else{ // cas classique : le projet dure pusieurs jours
+		} else{ // classic case : the project lasts several days
 		
-		    /*Dessin du premier jour*/  
-			$out.='<div style="background-color:'.$projet['couleur'].';" class="ganttProjectStart';
+		    /*First day's drawing*/  
+			$out.='<div style="background-color:'.$project['color'].';" class="ganttProjectStart';
 			
-			if(GanttReaderDate::completed($projet, $actuel)){
+			if(GanttReaderDate::completed($project, $now)){
 				$out.=' complete';
 			}
 			
@@ -412,17 +411,17 @@ class GanttReaderDrawer{
 			$current = strtotime('+1 day', $current);
 			   
 			   
-			/*Jours du centre*/
-			for(; $actuel<$projet['longueur']-1; $actuel++){
+			/*Middle days*/
+			for(; $now<$project['length']-2; $now++){
 				$out.='<td class="dayBox ';
 				
-				if(GanttReaderDate::inRest($current, $vacances)){
+				if(GanttReaderDate::inRest($current, $vacations)){
 					$out.=' dayOff';
 				}
 		
-				$out.='"><div style="background-color:'.$projet['couleur'].'" class="ganttProject';
+				$out.='"><div style="background-color:'.$project['color'].'" class="ganttProject';
 				
-				if(GanttReaderDate::completed($projet, $actuel)){
+				if(GanttReaderDate::completed($project, $now)){
 						$out.=' complete';
 				}
 				
@@ -431,16 +430,16 @@ class GanttReaderDrawer{
 				$current = strtotime('+1 day', $current);
 			}
 		
-		/*Dessin du dernier jour*/
+		/*Last day's drawing*/
 		$out.='<td class="dayBox';
 			  
-		if(GanttReaderDate::inRest($current, $vacances)){
+		if(GanttReaderDate::inRest($current, $vacations)){
 			$out.=' dayOff';
 		}
 		
-		$out.='"><div style="background-color:'.$projet['couleur'].';" class="ganttProjectEnd';
+		$out.='"><div style="background-color:'.$project['color'].';" class="ganttProjectEnd';
 		
-		if(GanttReaderDate::completed($projet, $actuel)){
+		if(GanttReaderDate::completed($project, $now)){
 			$out.=' complete';
 		}
 		
@@ -452,10 +451,10 @@ class GanttReaderDrawer{
 	}
 	
 	/**
-	 * Dessine une étoile de la couleur donnée, dans la case courante
-	 * @param (String) la couleur de l'étoile, codée en hexadécimal (#123ABC)
+	 * Draws a star of the given color in the current cell
+	 * @param (String) the hex-coded color of the star (#ABC123)
 	 */
-	static function drawStar($couleur){
+	static function drawStar($color){
 		return '	<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 					<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
 					<svg 
@@ -483,7 +482,7 @@ class GanttReaderDrawer{
 								z"
 						
        						style="
-								fill:'.$couleur.';
+								fill:'.$color.';
 								fill-rule:evenodd; 
 								stroke:#000000; 
 								stroke-width:1px; 
@@ -495,17 +494,17 @@ class GanttReaderDrawer{
 	}
 	
 	/*
-	 * Dessine un projet père (projet qui englobe un ou plusieurs autres sous-projets)
-	 * @params (array) $projet, $vacances respectivement le projet à traiter et les plages de congés
+	 * Draws a father project (a project that surround other projects as sub-projects)
+	 * @params (array) the $project to process, $vacations the vacations frames
 	 */
-	static function drawFather(&$projet, &$vacances){
-		$current = strtotime($projet['debut']);
-		$actuel = 0;
+	static function drawFather(&$project, &$vacations){
+		$current = strtotime($project['start']);
+		$now = 0;
 		
-		/*premier jour*/
+		/*first day*/
 		$out='<td class="daybox';
 		
-			if (GanttReaderDate::inRest($current, $vacances)){
+			if (GanttReaderDate::inRest($current, $vacations)){
 				$out.= ' dayOff';
 			}
 			
@@ -520,30 +519,30 @@ class GanttReaderDrawer{
    						height="30px"
 						top="0">
 							
-    						<polygon points="0,30 0,0 35,0 35,10 23,10" style="fill:'.$projet['couleur'].';stroke:none;" />
+    						<polygon points="0,30 0,0 35,0 35,10 23,10" style="fill:'.$project['color'].';stroke:none;" />
   					
 					</svg>';
 		$out.='</td>';
 		$current = strtotime('+1 day', $current);
-		$actuel++;
+		$now++;
 		
-		/*jours du centre*/
+		/*middle days*/
 		
-		for(; $actuel<$projet['longueur']; $actuel++){
+		for(; $now<$project['length']-1; $now++){
 			$out.='<td class="dayBox ';
-			if(GanttReaderDate::inRest($current, $vacances)){
+			if(GanttReaderDate::inRest($current, $vacations)){
 				$out.=' dayOff';
 			}
 		
 			$out.='">';
-			$out.='<div class="ganttFatherProject" style="background:'.$projet['couleur'].'"></div>';
+			$out.='<div class="ganttFatherProject" style="background:'.$project['color'].'"></div>';
 			$out.='</td>';
 			$current = strtotime('+1 day', $current);
 	 	 }
 		 
-		 /*jour de fin*/
+		 /*last day*/
 		 $out.='<td class="daybox';
-			if (GanttReaderDate::inRest($current, $vacances)){
+			if (GanttReaderDate::inRest($current, $vacations)){
 				$out.= ' dayOff';
 			}
 		$out.='">';
@@ -556,7 +555,7 @@ class GanttReaderDrawer{
    						width="35px"
    						height="30px">
 							
-    						<polygon points="0,0 35,0 35,30 12,10 0,10" style="fill:'.$projet['couleur'].';stroke:none" />
+    						<polygon points="0,0 35,0 35,30 12,10 0,10" style="fill:'.$project['color'].';stroke:none" />
   					
 					</svg>';
 		$out.='</td>';
