@@ -82,7 +82,7 @@ class GanttReaderDate{
 		if(isset($vacations)){
 			foreach($vacations as $vacation){
 				$start = strtotime($vacation['start']);
-				$end = strtotime($vacation['end']);
+				$end = strtotime('-1 day', strtotime($vacation['end'])); //patch : GanttProject adds a day to breaks
 				
 				if(GanttReaderDate::inSight($day, $start, $end)){ //si la date est dans une période de congé
 					return true;
