@@ -159,9 +159,9 @@ class GanttReaderParser{
 		
 		if(isset($gan->vacations->vacation)){
 		
-			foreach ($gan->vacations->vacation as $plage){
-				$start = $plage->attributes()->start->__toString();
-				$end = $plage->attributes()->end->__toString();
+			foreach ($gan->vacations->vacation as $range){
+				$start = $range->attributes()->start->__toString();
+				$end = $range->attributes()->end->__toString();
 				$vacations[] = array(
 									'start' => $start,
 									'end' => $end
