@@ -3,6 +3,10 @@
 defined('_JEXEC') or die('Restricted access');
 
 /***********************************************************************************************************************************
+ * @author Theo KRISZT
+ * @copyright (C) 2014 - Theo Kriszt
+ * @license GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
+ *
  * Renderer model
  * Provides the methods allowing the needed elements to be displayed
  * @return by default for all methods of this class, if nothing else is specified : (String) $out the HTML render of the element
@@ -241,7 +245,7 @@ class GanttReaderDrawer{
 						<!-- arrow -->
 						<path
        						d="M 7.5,7.5 0,0 0,15 z"
-       						style="fill:white; fill-rule:evenodd; stroke:white; 
+       						style="fill-rule:evenodd; 
 							stroke-width:1px; stroke-linecap:round; stroke-linejoin:round; stroke-opacity:1" />
 					</marker>
 					

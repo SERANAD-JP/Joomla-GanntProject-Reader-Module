@@ -3,39 +3,42 @@
 defined('_JEXEC') or die('Restricted access');
 
 /*******************************************************************************************************************************
- * Utilitaire de récupération des données
- * Le helper est chargé de retrouver les paramètres fournis dans le backend, d'extraire les données via le parseur et chercher des erreurs
- *******************************************************************************************************************************/
+ * @author Theo KRISZT
+ * @copyright (C) 2014 - Theo Kriszt
+ * @license GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
+ *
+ * Data gathering utility
+ * The helper aims to gather the parameters given in backend, extract data via the parser , then look for errors *******************************************************************************************************************************/
 
-$errors = ''; //On initialise les erreurs à (éventuellement) afficher plus tard
+$errors = ''; // Init the errors to potentially display later
 
-/*  Récupération des paramètres back-end  */
+/*  Gather the backend params  */
 
-$isLocal = $params->get('isLocal'); //le fichier est-il dans l'arborescence Joomla ?
+$isLocal = $params->get('isLocal'); //Is the file in Joomla tree ?
 
-$path = $params->get('path'); //chemin vers le fichier GanttProject
+$path = $params->get('path'); //path to the GanttProject file
 
-$range = $params->get('range'); //nombre de mois à afficher de part et d'autre du mois courant
+$range = $params->get('range'); //how many months shall be displayed on both sides of the current month
 
-$defaultColor = $params->get('defaultColor'); //couleur par defaut des projets
+$defaultColor = $params->get('defaultColor'); //default projects color
 
-$dayBoxColor = $params->get('dayBoxColor'); //couleur des cases "normales"
+$dayBoxColor = $params->get('dayBoxColor'); //basic cells color
 
-$dayOffColor = $params->get('dayOffColor'); //couleur des jours vaqués
+$dayOffColor = $params->get('dayOffColor'); //off days color
 
-$constraintColor = $params->get('constraintColor'); //couleur des flèches
+$constraintColor = $params->get('constraintColor'); //arrows color
 
 $titleColor = $params->get('titleColor');
 
 $textColor = $params->get('textColor'); 
 
-$todayColor = $params->get('todayColor'); //couleur de la barre marquant la date du jour actuel
+$todayColor = $params->get('todayColor'); //today vertical marker color
 
 
 
-/* On vérifie si les couleurs du backEnd fournies sont correctes(correspondent au masque "#ABCDEF")*/
+/* Are the given color correct (match with the "#ABCDEF" regex mask)*/
 
-$colorPattern='(#{1}(?:[A-F0-9]){6})(?![0-9A-F])';	// Pattern regex pour une couleur codée en hexadécimal
+$colorPattern='(#{1}(?:[A-F0-9]){6})(?![0-9A-F])';	// Pattern regex for an hex-coded color
 
 if (!preg_match_all ("/".$colorPattern."/is", $defaultColor, $matches))
 {
@@ -65,10 +68,10 @@ if (!preg_match_all ("/".$colorPattern."/is", $todayColor, $matches))
 {
 	$errors.=JText::_('MOD_GANTTREADER_TODAYCOLOR_ERROR').'<br />';
 }
-/* Fin de vérification des couleurs */
 
-switch(JFactory::getLanguage()->getTag()){ //afficher le titre dans quelle langue ? (anglais = par défaut)
-/* strucuture en switch pour implémentation facile  de langages supplémentaires */
+
+switch(JFactory::getLanguage()->getTag()){ //In wich language shall the title be displayed ? English is the default
+/* switch/case structured to easily implement more languages later */
 	case 'fr-FR':
 		$title = $params->get('frenchTitle');
 	break;
@@ -81,26 +84,26 @@ if(empty($title)){
 	$errors.=JText::_('MOD_GANTTREADER_MISSINGTITLE_ERROR').'<br />';
 }
 
-/* Déclaration du parseur */
+/* Defining the parser */
 if($isLocal){
 	$ganttPath =(JPATH_SITE.'/'.$path);
 	
-} else{ //si fichier externe, le télécharger dans le repertoire temporaire
+} else{ //If external file, download it in the temp dir
 	
-		@copy($path, sys_get_temp_dir().'/temp.gan'); // le @ bloque l'affichage de la possible erreur 404
+		@copy($path, sys_get_temp_dir().'/temp.gan'); // @ voids the possible 404 error to be thrown
 		@$ganttPath = sys_get_temp_dir().'/temp.gan';
 	}
 
-if(!@$gan=simplexml_load_file($ganttPath)){//Si le chargement échoue, alors ajouter l'erreur 404 à la liste d'erreurs
+if(!@$gan=simplexml_load_file($ganttPath)){//If loading fails, add the 404 error to the list
 	$errors.=JText::_('MOD_GANTTREADER_404_ERROR').'<br />';
 }
 
 if(!$isLocal){
-	unlink($ganttPath); //supprimer le fichier temporaire quand on a fini la lecture
+	unlink($ganttPath); // delete the temporary file when reading is complete
 }
 
 
-//Ajout des styles en fonction des paramètres
+// Add styles according to the parameters
 if(empty($errors)){
 $styles = 	'
 			#ganttDiagram, .dayBox{
@@ -116,9 +119,12 @@ $styles = 	'
 				background-color:'.$todayColor.';
 			}
 			
-			marker, path{
-				background-color:'.$constraintColor.';
+			path{
 				stroke:'.$constraintColor.';
+			}
+			
+			marker path{
+				fill:'.$constraintColor.';	
 			}
 			
 			td.dayOff{
@@ -139,26 +145,26 @@ $styles = 	'
 }
 
 
-$earliest = GanttReaderDate::earliestMonth($range); //mois le plus ancien à afficher
-$lastest = GanttReaderDate::lastestMonth($range); //mois le plus avancé à afficher
+$earliest = GanttReaderDate::earliestMonth($range); // oldest month to display
+$lastest = GanttReaderDate::lastestMonth($range); // most advanced month to display
 
 
-/*  Extraction des infos depuis le fichier GanttProject  */
+/*  Extract data from GanttProject file  */
 
-$vacations = GanttReaderParser::getVacations($gan); //extraction des plages de congés
+$vacations = GanttReaderParser::getVacations($gan); // extract break ranges
 
-$projects = GanttReaderParser::getProjects($gan, $vacations, $defaultColor, $earliest, $lastest); //extraction brute des projets
+$projects = GanttReaderParser::getProjects($gan, $vacations, $defaultColor, $earliest, $lastest); // raw extracting of projects list
 
 if(empty($projects)){
 	$errors.=JText::_('MOD_GANTTREADER_EMPTYDIAGRAM_ERROR').'<br />';
 } else{
-	$projects = GanttReaderDate::filterProjects($projects, $range); //filtrage des projets à afficher
+	$projects = GanttReaderDate::filterProjects($projects, $range); // filtering projects, only keeps projects to be displayed
 
 	if(empty($projects)){
 		$errors.=Jtext::_('MOD_GANTTREADER_NOTHINGTODISPLAY_ERROR').'<br />';
 	}
 }
 
-$constraints = GanttReaderParser::getConstraints($gan, $projects); //extraction des contraintes
+$constraints = GanttReaderParser::getConstraints($gan, $projects); // extracting constraints
 
 ?>

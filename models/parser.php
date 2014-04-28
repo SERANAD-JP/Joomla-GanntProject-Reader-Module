@@ -3,6 +3,10 @@
 defined('_JEXEC') or die('Restricted access');
 
 /************************************************************************************
+ * @author Theo KRISZT
+ * @copyright (C) 2014 - Theo Kriszt
+ * @license GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
+ *
  * Parsing utility that allows to gather the needed informations from the GanttProject file
  * The following elements are gathered :
  *	-> Projects exhaustive list and their properties

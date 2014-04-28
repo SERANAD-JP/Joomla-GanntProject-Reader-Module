@@ -3,6 +3,10 @@
 defined('_JEXEC') or die('Restricted access');
 
 /********************************************************************************
+ * @author Theo KRISZT
+ * @copyright (C) 2014 - Theo Kriszt
+ * @license GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
+ *
  * Date management model
  * Provides several methods to handle a calendar, dates and durations
  * Notice : the timestamp format referes to a timestamp-formatted int

@@ -5,6 +5,8 @@
 	<name>GanttReader</name>
 	<author>Théo Kriszt</author>
 	<version>1.0.0</version>
+	<creationDate>24 April 2014</creationDate>
+	<license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
 	<description>MOD_GANTTREADER_DESCRIPTION</description>
 	
 	<files>
