@@ -57,27 +57,21 @@ class GanttReaderParser{
 				$start = $task->attributes()->start->__toString();
 				$duration = $task->attributes()->duration->__toString(); //duration according to GanttProject : worked days
 				$meeting = $task->attributes()->meeting->__toString()==='true';
-
 				$length = GanttReaderDate::projectLength($start, $duration, $vacations); //actual project length
-
 				$progress = $task->attributes()->complete->__toString();
 				$hasChild = isset($task->task); // If at least a subTask is detected, the current project has a child
-
 				
 				/* Overflowing projects are truncated */
 				$end = strtotime('+'.($length).' days', strtotime($start));
 
 				if(strtotime($start)<$earliest && $end>$earliest){ // If begins too soon
 					$length = GanttReaderDate::gap($end, $earliest); // Remove surplus
-					
 					$start = date('Y-m-d', $earliest); // Set start date to the beginning of the view
-					
 				}
 				
 				if($end>$lastest && strtotime($start)<$lastest){// If ends too late
 					$length = GanttReaderDate::gap(strtotime($start), $lastest)+1; // reduce its length
 				}
-				
 			
 				$projects[] = array(
 								'id' => $id,
@@ -87,14 +81,15 @@ class GanttReaderParser{
 								'length' => $length,
 								'progress' => $progress,
 								'meeting' =>$meeting,
-								'hasChild' => $hasChild,
-								);
+								'hasChild' => $hasChild	);
 								
 						
 				if(isset($task->task)){ // if a subtask exists
 					foreach($task->task as $subTask){
 						GanttReaderParser::getProjectProperties($subTask, $gan, $defaultColor, $projects, $vacations, $earliest, $lastest);
 					}
+					
+					
 				}
 				
 	 }
@@ -141,8 +136,8 @@ class GanttReaderParser{
 				}
 		}
 			
-			foreach($task->depend as $dep){ //récupérer les constraints (dépendances) avec les id
-				//seulement si la source et la cible de la constraint s'affichent dans le diagramme
+			foreach($task->depend as $dep){ //get the constraints (dependencies) with ID
+				//only if both source and target shall be displayed
 				if(isset($indexes[$task->attributes()->id->__toString()], $indexes[$dep->attributes()->id->__toString()])){
 					$constraints[]= array(	
 										'from' => $indexes[$task->attributes()->id->__toString()],

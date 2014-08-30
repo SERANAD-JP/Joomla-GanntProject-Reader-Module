@@ -9,10 +9,13 @@
  **************************************************************************/
 defined('_JEXEC') or die('Restricted access');
 
-if(!empty($errors)){
-	echo('<div style="color:red;">'.$errors.'</div>');
-} else{
-	
-GanttReaderDrawer::drawDiagram($title, $projects, $vacations, $constraints, $earliest, $lastest);
+if(!empty($errors)){ //If errors were found, show them
+	echo('<div style="color:red;">'
+        .'Module GanttReader : <br>'
+        .$errors
+        .'</div>');
+} else{ // Proceed to normal display
+
+GanttReaderDrawer::drawDiagram($title, $projects);
 }
 ?>

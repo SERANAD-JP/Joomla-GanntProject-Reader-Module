@@ -4,8 +4,8 @@
 <extension type="module" version="3.0.0" client="site" method="upgrade">
 	<name>GanttReader</name>
 	<author>Théo Kriszt</author>
-	<version>1.0.0</version>
-	<creationDate>24 April 2014</creationDate>
+	<version>1.1.0</version>
+	<creationDate>01 September 2014</creationDate>
 	<license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
 	<description>MOD_GANTTREADER_DESCRIPTION</description>
 	
@@ -21,10 +21,13 @@
 	</files>
 	
 	<media folder="media" destination="mod_ganttreader">
-		<!-- Ressources à fournir -->
+		<!-- Resources to provide -->
 		<filename>gantt.gan</filename>
+		<filename>expand.png</filename>
+		<filename>retract.png</filename>
 		<filename>stripes.png</filename>
 		<filename>mod_ganttreader.css</filename>
+		<filename>ganttReaderUtils.js</filename>
 		<filename>index.html</filename>
 	</media>
 	
@@ -63,6 +66,17 @@
 				default="media/mod_ganttreader/gantt.gan"
 				label="MOD_GANTTREADER_PATH_LABEL"
 				description="MOD_GANTTREADER_PATH_DESC"/>
+
+                <field
+                        name="lastModified"
+                        type="radio"
+                        class="btn-group btn-group-yesno"
+                        default="1"
+                        label="MOD_GANTTREADER_LASTMODIFIED_LABEL"
+                        description="MOD_GANTTREADER_LASTMODIFIED_DESC">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
 			
 			
 				<field name="range"

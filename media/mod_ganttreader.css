@@ -2,137 +2,168 @@
 /* CSS Document */
 
 #ganttDiagram{ /* Main container */
-	position:relative;
-	float:left;
-	height:300px;
-    width:100%;
-	overflow:auto;
-}
 
-.ganttProject, .ganttProjectStart, .ganttProjectEnd{ /* Projects bars */
-	width:auto;
-	height:85%;
-    z-index:1;
-	margin: 0;
-	border-top: 1px solid black;
-	border-bottom: 1px solid black;
-    -webkit-box-shadow: rgba(0, 0, 0, 0.9) 0 2px 6px, rgba(255, 255, 255, 0.2) 0 1px 0 inset;
-    -moz-box-shadow: rgba(0, 0, 0, 0.9) 0 2px 6px, rgba(255, 255, 255, 0.2) 0 1px 0 inset;
-    box-shadow:rgba(255, 255, 255, 0.2) 0 1px 0 inset;
-	opacity: .9;
-}
-
-.ganttFatherProject{ /* Surrounding projects : father projects*/
     position:relative;
-    top:-13px;
-	height:10px;
-    margin-left:-1px;
-    margin-right:-1px;
+    float:left;
+    height:auto;
+    width:100%; /*Since 1.1.0 uses all space available*/
+    overflow:auto;
+    z-index: 2; /*ensure overlapping for full screen mode*/
 }
 
-.ganttProject{ /* Usual project : central cells */
-    margin-right:-1px;
+.ganttProject {
+    z-index: 1;
+    border: 1px solid #000;
+    border-radius: 3px;
+    box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2) inset;
+    opacity: 0.9;
+    top: 2px;
+    bottom: 2px;
+    left: 2px;
+    right: 2px;
 }
 
-.ganttProjectStart{ /* Usual project : first cell */
-	float:right;
-	width:100%;
-	border-left: 1px solid black;
-    border-top-left-radius:3px;
-    border-bottom-left-radius:3px;
-	margin-right:-1px;
-	padding-right:1px;
-}
-
-.ganttProjectEnd{ /* Usual project : last cell */
-	width:85%;
-	border-right:1px solid black;
-	border-top-right-radius:3px;;
-	border-bottom-right-radius:3px;
-    margin-left:0px;
-    margin-right:2px;
-}
-
-.ganttEmbed{ /* Diagram title and number of the current day */
-    text-transform:uppercase;
-    font-weight:bold;
-    
-}
-
-#ganttTitle{ /* Diagram's title */
+.ganttFatherProject, .ganttProject{ /* Surrounding projects : father projects & usual project are positionned by absolute coordinates*/
     position:absolute;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    width:200px;
-    height:72px;
-}
-
-
-#time{/* Marker of the current day */
-	position:absolute;
-	top: 72px;
-	width:3px;	
-	z-index: 3;
 }
 
 .ganttObject{ /* Constraints and stars */
-	position:absolute;
+    position:absolute;
     z-index:2;
 }
 
-path{ /* Arrow line */
-	stroke-width:3px;
+.ganttTitle{
+    text-transform:uppercase;
+}
+
+.ganttReinforced{ /* Emphasis style */
+
+    font-weight:bold;
+}
+
+.ganttName{ /*Space for projects names, allows long names*/
+    height: 35px;
+    overflow: hidden;
+}
+.ganttName:hover{
+    height: auto;
+}
+
+.time{/* Marker for the current day */
+    position:absolute;
+    display: inline-block;
+    height: 100%;
+    width:3px;
+    z-index: 3;
+}
+
+
+path{ /* Arrow line with SVG*/
+    stroke-width:3px;
     stroke-linecap:round;
     fill:none;
 }
 
 
 #ganttDiagram table td{ /* Diagram cells */
-    
-	text-align:center;
-	border:1px solid rgba(0,0,0,0.5);
-	height:35px;
-    
-	min-width:35px;
+
+    text-align:center;
+    border:1px solid rgba(0,0,0,0.5);
+    height:35px;
+
+    min-width:35px;
     max-width:35px;
     padding:0;
 }
 
+#ganttTitle{ /* Diagram's title */
+    position:relative;
+    float: left;
+
+    display: flex; /*Hail to CSS3 !*/
+    align-items:center;
+    justify-content:center;
+
+    width:20%;
+    height:72px; /*measures 2 rows = 2*36 (cells) + 2*1 (borders)*/
+}
+
 
 #ganttHeader{ /* Months and days */
-	position:relative;
-	left:200px;
-    width:480px;
-	box-shadow:0 2px 2px black;
+    position:relative;
+    float: left;
+    width:80%;
+
+    box-shadow:0 2px 2px black;
     font-weight:bold;
     overflow:hidden;
     z-index:4;
 }
 
 #ganttSider{ /* Name and projects progresses */
-    position:absolute;
-    top:72px;
-	width: 200px;
+    position:relative;
+    float: left;
+    width: 20%;
     height:206px;
+
     overflow:hidden;
-	border-right: 1px solid rgba(0,0,0,1); 
-	box-shadow:2px 0 2px black;
-	z-index:2;
+    box-shadow:2px 0 2px black;
+    z-index:2;
 }
 
-#ganttSider table{ 
+#ganttSider table{
     width:100%;
 }
 
 #ganttDays{ /* Projects renderer container */
-	position:absolute;
-    left:200px;
-    top:0px;
+    position:relative;
     height:226px;
-    width:500px;
-    padding-top:72px;
+    width:80%;
+
     overflow:scroll;
-    
 }
 
+#ganttLegend{
+    display: flex; /*Hail to CSS3 !*/
+    align-items:center;
+    justify-content:center;
+    overflow: hidden;
+    position: relative;
+    height: 50px;
+
+    border: 1px solid black;
+
+
+    background-color: #14424C;
+
+}
+
+.ganttLegendButton{/*hint buttons that can be found in legend & left panel*/
+    color: white;
+    overflow: hidden;
+    border-radius:3px;
+    display: inline-flex;
+
+    justify-content:center;
+
+
+    background-color: rgba(148, 161, 161, 0.5);
+    width: 30px;
+    height: 30px;
+}
+
+.ganttLegendButton:hover{
+    cursor: pointer;
+    background-color: rgba(148, 161, 161, 0.9);
+}
+
+.ganttLegendInformation{
+    display: inline-flex;
+    justify-content:center;
+    padding: 2em;
+}
+
+.ganttRight{
+    float: right;
+    margin-right: 5px;
+}

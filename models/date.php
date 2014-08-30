@@ -9,7 +9,7 @@ defined('_JEXEC') or die('Restricted access');
  *
  * Date management model
  * Provides several methods to handle a calendar, dates and durations
- * Notice : the timestamp format referes to a timestamp-formatted int
+ * Notice : the timestamp format refers to a timestamp-formatted int
  ********************************************************************************/
  
 class GanttReaderDate{
@@ -106,7 +106,7 @@ class GanttReaderDate{
 	
 	
 	/**
-	 * @params (timestamp) $dateA et $dateB  the days between wich you measure the gap
+	 * @params (timestamp) $dateA et $dateB  the days between which you measure the gap
 	 * @return (int) the number of days between the two days
 	 * @see www.php.net/manual/en/book.datetime.php
 	 */
@@ -242,9 +242,9 @@ class GanttReaderDate{
 	}
 	
 	/**
-	 * @param (array) $project to process
+	 * @param (array) the $project to process
 	 * @param (array) $vacations the vacations frames
-	 * @return (int) the calculated length of the project, i.e. how many days the project will be occupied
+	 * @return (int) the processed length of the project, i.e. how many days the project will occup
 	 * How : GanttProject provides worked days, just add the off days
 	 */
 	 static function projectLength($start, $duration, $vacations){
@@ -261,7 +261,7 @@ class GanttReaderDate{
 		 
 		 do{
 			 			 
-			 $current = strtotime('+1 day', $current);
+			 $current = strtotime('+1 day', $current); // jump to the next day
 			 
 			 if(!GanttReaderDate::inRest($current, $vacations)){
 				$worked--; 
@@ -269,7 +269,7 @@ class GanttReaderDate{
 				$off++; 
 			 }
 			 
-		 }while($worked>1);
+		 }while($worked>1); // while worked days counter isn't elapsed
 		 
 
 		 return ($duration+$off);
