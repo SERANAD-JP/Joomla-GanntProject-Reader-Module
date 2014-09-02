@@ -106,7 +106,7 @@ if(!$isLocal){
 if(empty($errors)){
 
     $styles ='
-			#ganttDiagram, .dayBox{
+			#ganttDiagram, .dayBox, #ganttLegend{
     			background-color:'.$dayBoxColor.';
 				color:'.$textColor.';
 			}
